@@ -1,0 +1,32 @@
+.button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button.default {
+    background-color: #e0e0e0;
+    color: #000;
+  }
+  
+  .button.danger {
+    background-color: #e74c3c;
+    color: #fff;
+  }
+  
+  .button.danger:hover {
+    background-color: #c0392b;
+  }
+  
+  .button.green {
+    background-color: #2ecc71;
+    color: #fff;
+  }
+  
+  .button.green:hover {
+    background-color: #27ae60;
+  }
+  

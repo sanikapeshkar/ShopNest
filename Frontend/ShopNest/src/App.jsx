@@ -1,5 +1,10 @@
+import Dashboard from "./pages/Dashboard/Dashboard";
+
 function App() {
-  return <></>;
+  return <>
+  <div>vjhv</div>
+    <Dashboard />
+  </>;
 }
 
 export default App;
