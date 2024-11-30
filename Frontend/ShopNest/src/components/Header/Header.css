@@ -1,0 +1,72 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 20px;
+  background-color: #34495e;
+  color: #fff;
+}
+
+.header-logo {
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.logo {
+  font-family: cursive;
+}
+
+.header-search {
+  flex: 1;
+  margin: 0 20px;
+}
+
+.header-search-input {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+}
+
+.header-actions .header-logout-button {
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.header-actions .header-logout-button:hover {
+  background-color: #c0392b;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.header-actions .header-button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.header-actions .header-button.default {
+  background-color: #3498db;
+  color: white;
+}
+
+.header-actions .header-button.danger {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.header-actions .header-button:hover {
+  opacity: 0.9;
+}
