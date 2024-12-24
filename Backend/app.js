@@ -2,12 +2,22 @@ import express from "express";
 import mongoose from "mongoose";
 import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import cartRoutes from "./routes/cartRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // MongoDB connection URI
 const mongoURI = "mongodb://localhost:27017/Shopify";
 
+
+app.use(cors(corsOptions));
+
+// Routes
+app.get('/', (req, res) => {
+  res.send('CORS-enabled backend running!');
+});
 // Middleware
 app.use(express.json());
 
@@ -36,8 +46,9 @@ app.listen(PORT, () => {
 });
 
 app.use("/api", productRoutes);
-
+app.use("/api", orderRoutes);
 app.use("/api", userRoutes);
+app.use("/api", cartRoutes);
 mongoose.connection.on("connected", () => {
   console.log("Mongoose connected to DB");
 });
