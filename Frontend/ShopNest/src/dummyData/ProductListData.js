@@ -1,12 +1,12 @@
 const Products = [
-    {
-      id: 1,
-      image: 'https://via.placeholder.com/300',
-      name: 'Wireless Headphones',
-      price: 49.99,
-      originalPrice: 79.99,
-      discount: 20,
-    },
+      {
+        id: 1,
+        image: 'https://via.placeholder.com/300',
+        name: 'Wireless Headphones',
+        price: 49.99,
+        originalPrice: 79.99,
+        discount: 20,
+      },
     {
       id: 2,
       image: 'https://via.placeholder.com/300',
