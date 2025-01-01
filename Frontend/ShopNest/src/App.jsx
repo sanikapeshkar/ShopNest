@@ -1,8 +1,10 @@
 import Dashboard from "./pages/Dashboard/Dashboard";
-
+import { AuthProvider } from "./pages/Dashboard/AuthContext";
 function App() {
   return <div>
-    <Dashboard />
+    <AuthProvider>
+      <Dashboard />
+    </AuthProvider>,
   </div>;
 }
 

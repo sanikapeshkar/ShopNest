@@ -1,14 +1,26 @@
-import React from 'react';
+// Modal.jsx
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import './Modal.css';
 import Button from '../Button/Button';
+import { AuthContext } from '../../pages/Dashboard/AuthContext';
 
 const Modal = ({ product, onClose }) => {
+  const { isAuthenticated, setLoginPopup } = useContext(AuthContext);
+
   if (!product) return null;
 
   const discountedPrice = product.discount
     ? (product.originalPrice - (product.originalPrice * product.discount) / 100).toFixed(2)
     : null;
+
+  const handleAddToCart = () => {
+    if (!isAuthenticated) {
+      setLoginPopup(true)
+      return;
+    }
+    console.log('Added to cart');
+  };
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -27,7 +39,7 @@ const Modal = ({ product, onClose }) => {
               Quantity:
               <input type="number" defaultValue={1} min={1} className="modal-quantity-input" />
             </label>
-            <Button buttonType="default" onClick={() => console.log('Added to cart')}>
+            <Button buttonType="default" onClick={handleAddToCart}>
               Add to Cart
             </Button>
           </div>

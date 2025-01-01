@@ -1,9 +1,8 @@
 // Login.jsx
 import React, { useState } from 'react';
-import { login } from './authService';
 import './Login.css'; // Import the Login CSS file
 
-const Login = () => {
+const Login = ({ onLoginSuccess, showSignupPopup }) => {
   const [credentials, setCredentials] = useState({
     email: '',
     password: ''
@@ -33,27 +32,27 @@ const Login = () => {
     <div className="login-container">
       <h2>Login</h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      
+
       <form onSubmit={handleSubmit}>
         <div>
           <label>Email</label>
-          <input 
-            type="email" 
-            name="email" 
-            value={credentials.email} 
-            onChange={handleChange} 
-            required 
+          <input
+            type="email"
+            name="email"
+            value={credentials.email}
+            onChange={handleChange}
+            required
           />
         </div>
 
         <div>
           <label>Password</label>
-          <input 
-            type="password" 
-            name="password" 
-            value={credentials.password} 
-            onChange={handleChange} 
-            required 
+          <input
+            type="password"
+            name="password"
+            value={credentials.password}
+            onChange={handleChange}
+            required
           />
         </div>
 
@@ -61,7 +60,13 @@ const Login = () => {
       </form>
 
       <p>
-        Don't have an account? <a href="/signup">Sign up here</a>
+        Don't have an account?  <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            showSignupPopup();
+          }}
+        >Sign up here</a>
       </p>
     </div>
   );

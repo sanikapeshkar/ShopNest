@@ -1,9 +1,7 @@
-// Signup.jsx
 import React, { useState } from 'react';
-import { signup } from './authService';
 import './Signup.css'; // Import the Signup CSS file
 
-const Signup = () => {
+const Signup = ({ onSignupSuccess, showLoginPopup }) => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -22,9 +20,10 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Replace with your actual signup logic
       const userData = await signup(formData);
       console.log('Signup successful:', userData);
-      window.location.href = '/login';
+      onSignupSuccess();
     } catch (err) {
       setError('Signup failed. Please try again.');
     }
@@ -73,7 +72,16 @@ const Signup = () => {
       </form>
 
       <p>
-        Already have an account? <a href="/login">Login here</a>
+        Already have an account?{' '}
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            showLoginPopup();
+          }}
+        >
+          Login here
+        </a>
       </p>
     </div>
   );
