@@ -4,11 +4,20 @@ import ProductCard from '../ProductCard/ProductCard';
 import './ProductList.css';
 
 const ProductList = ({ products }) => {
+    if (!Array.isArray(products)) {
+      console.error('Products is not an array:', products);
+      return <div>No products available</div>;
+    }
+  
+    if (products.length === 0) {
+      return <div>No products found</div>;
+    }
   return (
     <div className="product-list">
-      {products.map((product) => (
+      {products?.map((product) => (
         <ProductCard
           key={product.id}
+          id={product._id}
           image={product.image}
           name={product.name}
           price={product.price}

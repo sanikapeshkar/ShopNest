@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import './Signup.css'; // Import the Signup CSS file
+import './Signup.css'; 
+import { loginService } from '../../services/login.service';
 
 const Signup = ({ onSignupSuccess, showLoginPopup }) => {
   const [formData, setFormData] = useState({
-    username: '',
+    name: '',
     email: '',
     password: ''
   });
@@ -20,9 +21,7 @@ const Signup = ({ onSignupSuccess, showLoginPopup }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Replace with your actual signup logic
-      const userData = await signup(formData);
-      console.log('Signup successful:', userData);
+      const userData = await loginService.signup(formData);
       onSignupSuccess();
     } catch (err) {
       setError('Signup failed. Please try again.');
@@ -39,8 +38,8 @@ const Signup = ({ onSignupSuccess, showLoginPopup }) => {
           <label>Username</label>
           <input 
             type="text" 
-            name="username" 
-            value={formData.username} 
+            name="name" 
+            value={formData.name} 
             onChange={handleChange} 
             required 
           />

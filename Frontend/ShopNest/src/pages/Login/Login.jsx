@@ -1,8 +1,11 @@
-// Login.jsx
-import React, { useState } from 'react';
-import './Login.css'; // Import the Login CSS file
+
+import React, { useContext, useState } from 'react';
+import './Login.css'; 
+import { loginService } from '../../services/login.service';
+import { AuthContext } from './AuthContext';
 
 const Login = ({ onLoginSuccess, showSignupPopup }) => {
+  const { setIsAuthenticated, setUserId } = useContext(AuthContext);
   const [credentials, setCredentials] = useState({
     email: '',
     password: ''
@@ -19,10 +22,12 @@ const Login = ({ onLoginSuccess, showSignupPopup }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(credentials,'credentials');
     try {
-      const userData = await login(credentials);
+      const userData = await loginService.login(credentials);
+      setIsAuthenticated(true);
+      setUserId(userData.user.id);
       console.log('Login successful:', userData);
-      window.location.href = '/dashboard'; // Redirect after successful login
     } catch (err) {
       setError('Login failed. Please try again.');
     }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import './ProductCard.css';
 import Modal from '../Modal/Modal';
 
-const ProductCard = ({ image, name, price, discount, originalPrice }) => {
+const ProductCard = ({id, image, name, price, discount, originalPrice }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const discountedPrice = discount
@@ -43,7 +43,7 @@ const ProductCard = ({ image, name, price, discount, originalPrice }) => {
       {/* Render Modal */}
       {isModalOpen && (
         <Modal
-          product={{ image, name, price, discount, originalPrice }}
+          product={{ id,image, name, price, discount, originalPrice }}
           onClose={handleModalClose}
         />
       )}
