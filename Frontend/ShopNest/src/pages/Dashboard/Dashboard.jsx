@@ -6,11 +6,13 @@ import data from '../../dummyData/ProductListData';
 import Header from '../../components/Header/Header';
 import Login from '../Login/Login';
 import Signup from '../Login/Signup';
+import Profile from '../Profile/Profile';
 import { AuthContext } from './AuthContext';
 
 const Dashboard = () => {
   const { isAuthenticated, loginPopup, setLoginPopup } = useContext(AuthContext);
   const [signupPopup, setSignupPopup] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
 
   const handleSignup = () => {
     setSignupPopup(true);
@@ -25,6 +27,14 @@ const Dashboard = () => {
     setSignupPopup(false);
   };
 
+  const handleCartClick = () => {
+    setShowProfile(true);
+  };
+
+  const closeProfile = () => {
+    setShowProfile(false);
+  };
+
   return (
     <div className="dashboard">
       <Header
@@ -32,6 +42,7 @@ const Dashboard = () => {
         onLogin={() => setLoginPopup(true)}
         onLogout={() => setIsAuthenticated(false)}
         onSignup={handleSignup}
+        onCartClick={handleCartClick}
       />
       <main className="dashboard-main">
         <ProductList products={data} />
@@ -57,6 +68,18 @@ const Dashboard = () => {
               ×
             </button>
             <Signup onSignupSuccess={onSignupSuccess} showLoginPopup={() => setLoginPopup(true)} />
+          </div>
+        </div>
+      )}
+
+      {/* Profile Popup */}
+      {showProfile && (
+        <div className="modal">
+          <div className="modal-content">
+            <button className="close-button" onClick={closeProfile}>
+              ×
+            </button>
+            <Profile />
           </div>
         </div>
       )}

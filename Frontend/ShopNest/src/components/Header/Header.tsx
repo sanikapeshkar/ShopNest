@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 import './Header.css';
 import Button from '../Button/Button';
 
-const Header = ({ isAuthenticated, onLogout, onLogin, onSignup, handleAddTocart }) => {
+const Header = ({ isAuthenticated, onLogout, onLogin, onSignup, onCartClick }) => {
   const [showCart, setShowCart] = useState(false);
+
   const displayCart = () => {
-    setShowCart(true)
-  }
+    setShowCart(true);
+    onCartClick();
+  };
+
   return (
     <header className="header">
       <div className="header-logo">
@@ -32,7 +35,9 @@ const Header = ({ isAuthenticated, onLogout, onLogin, onSignup, handleAddTocart 
           </>
         ) : (
           <>
-            <Button buttonType="default" onClick={handleAddTocart}>Add to Cart</Button>
+            <Button buttonType="default" onClick={displayCart}>
+              Cart
+            </Button>
             <Button buttonType="danger" onClick={onLogout}>
               Logout
             </Button>
@@ -48,6 +53,7 @@ Header.propTypes = {
   onLogout: PropTypes.func.isRequired,
   onLogin: PropTypes.func.isRequired,
   onSignup: PropTypes.func.isRequired,
+  onCartClick: PropTypes.func.isRequired,
 };
 
 export default Header;
