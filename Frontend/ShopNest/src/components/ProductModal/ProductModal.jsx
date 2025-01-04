@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import './ProductModal.css';
+import { addToCart } from '../../services/cart.service';
 
-const ProductModal = ({ product, onClose }) => {
+const ProductModal = ({ product, onClose,userId }) => {
   const [quantity, setQuantity] = useState(1);
 
   const handleIncrement = () => {
@@ -13,6 +14,15 @@ const ProductModal = ({ product, onClose }) => {
       setQuantity(prev => prev - 1);
     }
   };
+
+  const handleAddToCart=async()=>{
+    const cartData={
+      productId:product.id,
+      quantity:quantity
+    }
+    await addToCart(cartData,userId);
+    onClose();
+  }
 
   const discountedPrice = product.discount
     ? (product.originalPrice - (product.originalPrice * product.discount) / 100).toFixed(2)
@@ -62,7 +72,7 @@ const ProductModal = ({ product, onClose }) => {
               </button>
             </div>
 
-            <button className="add-to-cart-btn">
+            <button className="add-to-cart-btn" onClick={handleAddToCart}>
               Add to Cart - ${(discountedPrice * quantity).toFixed(2)}
             </button>
           </div>

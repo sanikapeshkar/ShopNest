@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import './ProductCard.css';
 import ProductModal from '../ProductModal/ProductModal';
 
-const ProductCard = ({ image, name, price, discount, originalPrice }) => {
+const ProductCard = ({id, image, name, price, discount, originalPrice }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleCardClick = () => {
@@ -38,7 +38,7 @@ const ProductCard = ({ image, name, price, discount, originalPrice }) => {
 
       {isModalOpen && (
         <ProductModal
-          product={{ image, name, price, discount, originalPrice }}
+          product={{id,image, name, price, discount, originalPrice }}
           onClose={handleModalClose}
         />
       )}

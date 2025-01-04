@@ -1,16 +1,19 @@
 import React, { createContext, useState } from 'react';
 
 export const AuthContext = createContext({
-  isAuthenticated: false,
-  setIsAuthenticated: (value) => {}, // Accepts a boolean value
+  isAuthenticated: localStorage.getItem('token') ? true : false,
+  setIsAuthenticated: (value) => {},
   loginPopup: false,
-  setLoginPopup: (value) => {}, // Accepts a boolean value
+  setLoginPopup: (value) => {}, 
+  userId: localStorage.getItem('userId') || null,
+  setUserId: (value) => {}, 
 });
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState( localStorage.getItem('token') ? true : false);
   const [loginPopup, setLoginPopup] = useState(false);
-
+  const [userId, setUserId] = useState(localStorage.getItem('userId') || null);
+ 
   return (
     <AuthContext.Provider
       value={{
@@ -18,6 +21,8 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated,
         loginPopup,
         setLoginPopup,
+        userId,
+        setUserId,
       }}
     >
       {children}

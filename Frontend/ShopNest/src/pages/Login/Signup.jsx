@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import './Signup.css';
+import './Signup.css'; 
+import { loginService } from '../../services/login.service';
 
 const Signup = ({ onSignupSuccess, showLoginPopup }) => {
   const [formData, setFormData] = useState({
@@ -19,7 +20,12 @@ const Signup = ({ onSignupSuccess, showLoginPopup }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add your signup logic here
+    try {
+      const userData = await loginService.signup(formData);
+      onSignupSuccess();
+    } catch (err) {
+      setError('Signup failed. Please try again.');
+    }
   };
 
   return (

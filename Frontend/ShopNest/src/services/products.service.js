@@ -1,18 +1,19 @@
 
 import axios from 'axios';
+import api from './api';
 const BASE_URL = 'http://your-backend-api-url'; 
+
 
 export const getAllProducts = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/products`);
-    return response.data; 
+    const response = await api.get('/products');
+    return response.data;
   } catch (error) {
     console.error('Error fetching products:', error);
-    throw error; 
+    throw error;
   }
 };
 
-// Function to get a product by id
 export const getProductById = async (id) => {
   try {
     const response = await axios.get(`${BASE_URL}/products/${id}`);
