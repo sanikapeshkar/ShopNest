@@ -12,7 +12,7 @@ const Profile = () => {
       setCartItems(cartItems);
     }
     fetchCartItems();
-  },[cartItems]);
+  },[]);
 
   const updateQuantity = (id, change) => {
     setCartItems(items =>
@@ -29,9 +29,13 @@ const Profile = () => {
   };
 
   const calculateTotal = () => {
-    return cartItems.reduce((total, item) => total + (item.productId.price * item.productId.quantity), 0);
+    return cartItems.reduce((total, item) => total + (item.productId.price * item.quantity), 0);
   };
 
+
+  const handleCheckout=()=>{
+    console.log('checkout');
+  }
   if (cartItems.length === 0) {
     return (
       <div className="profile-page">
@@ -70,7 +74,7 @@ const Profile = () => {
                   >
                     -
                   </button>
-                  <span className="quantity-value">{item.productId.quantity}</span>
+                  <span className="quantity-value">{item.quantity}</span>
                   <button 
                     className="quantity-btn"
                     onClick={() => updateQuantity(item.productId._id, 1)}
