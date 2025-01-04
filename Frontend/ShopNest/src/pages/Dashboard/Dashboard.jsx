@@ -46,12 +46,11 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="dashboard">
+    <div className="app-container">
       <Header
         isAuthenticated={isAuthenticated}
         onLogin={() => setLoginPopup(true)}
         onLogout={() => setIsAuthenticated(false)}
-        onSignup={handleSignup}
         onCartClick={handleCartClick}
       />
       <main className="dashboard-main">
@@ -83,9 +82,12 @@ const Dashboard = () => {
             <button className="close-button" onClick={closeSignupPopup}>
               ×
             </button>
-            <Signup
-              onSignupSuccess={onSignupSuccess}
-              showLoginPopup={() => setLoginPopup(true)}
+            <Signup 
+              onSignupSuccess={onSignupSuccess} 
+              showLoginPopup={() => {
+                setSignupPopup(false);
+                setLoginPopup(true);
+              }} 
             />
           </div>
         </div>

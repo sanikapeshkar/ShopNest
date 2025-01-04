@@ -8,15 +8,14 @@ const Login = ({ onLoginSuccess, showSignupPopup }) => {
   const { setIsAuthenticated, setUserId } = useContext(AuthContext);
   const [credentials, setCredentials] = useState({
     email: '',
-    password: ''
+    password: '',
   });
-
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
-    setCredentials({
-      ...credentials,
-      [e.target.name]: e.target.value
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -34,45 +33,65 @@ const Login = ({ onLoginSuccess, showSignupPopup }) => {
   };
 
   return (
-    <div className="login-container">
-      <h2>Login</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <div className="auth-modal">
+      <div className="auth-header">
+        <h2 className="auth-title">Welcome Back</h2>
+        <p className="auth-subtitle">Sign in to continue shopping</p>
+      </div>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            value={credentials.email}
-            onChange={handleChange}
-            required
-          />
+      <form className="auth-form" onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label className="form-label" htmlFor="email">
+            <FiMail className="input-icon" /> Email
+          </label>
+          <div className="input-container">
+            <input
+              type="email"
+              id="email"
+              name="email"
+              className="form-input"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Enter your email"
+              required
+            />
+          </div>
         </div>
 
-        <div>
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            value={credentials.password}
-            onChange={handleChange}
-            required
-          />
+        <div className="form-group">
+          <label className="form-label" htmlFor="password">
+            <FiLock className="input-icon" /> Password
+          </label>
+          <div className="input-container">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              className="form-input"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+          <div className="forgot-password">
+            <span className="auth-link">Forgot Password?</span>
+          </div>
         </div>
 
-        <button type="submit">Login</button>
+        {error && <div className="error-message">{error}</div>}
+
+        <button type="submit" className="auth-button">
+          Sign In
+        </button>
       </form>
 
-      <p>
-        Don't have an account?  <a
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            showSignupPopup();
-          }}
-        >Sign up here</a>
-      </p>
+      <div className="auth-footer">
+        Don't have an account?
+        <span className="auth-link" onClick={showSignupPopup}>
+          Sign Up
+        </span>
+      </div>
     </div>
   );
 };

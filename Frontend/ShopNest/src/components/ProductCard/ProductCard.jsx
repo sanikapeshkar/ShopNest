@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './ProductCard.css';
-import Modal from '../Modal/Modal';
+import ProductModal from '../ProductModal/ProductModal';
 
 const ProductCard = ({id, image, name, price, discount, originalPrice }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const discountedPrice = discount
-    ? (originalPrice - (originalPrice * discount) / 100).toFixed(2)
-    : null;
 
   const handleCardClick = () => {
     setIsModalOpen(true);
@@ -26,7 +22,7 @@ const ProductCard = ({id, image, name, price, discount, originalPrice }) => {
           <h2 className="product-card-name">{name}</h2>
           <div className="product-card-prices">
             <span className="product-card-price">
-              ${discountedPrice || price}
+              ${discount ? (originalPrice - (originalPrice * discount) / 100).toFixed(2) : price}
             </span>
             {discount && (
               <>
@@ -40,9 +36,8 @@ const ProductCard = ({id, image, name, price, discount, originalPrice }) => {
         </div>
       </div>
 
-      {/* Render Modal */}
       {isModalOpen && (
-        <Modal
+        <ProductModal
           product={{ id,image, name, price, discount, originalPrice }}
           onClose={handleModalClose}
         />
