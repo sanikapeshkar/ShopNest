@@ -3,10 +3,10 @@ import React, { useContext, useState } from 'react';
 import './Login.css'; 
 import { loginService } from '../../services/login.service';
 import { AuthContext } from './AuthContext';
-
+import { FiMail, FiLock } from 'react-icons/fi';
 const Login = ({ onLoginSuccess, showSignupPopup }) => {
   const { setIsAuthenticated, setUserId } = useContext(AuthContext);
-  const [credentials, setCredentials] = useState({
+  const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
@@ -21,11 +21,15 @@ const Login = ({ onLoginSuccess, showSignupPopup }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(credentials,'credentials');
+    console.log(formData,'formData');
     try {
-      const userData = await loginService.login(credentials);
+      const userData = await loginService.login(formData);
       setIsAuthenticated(true);
       setUserId(userData.user.id);
+
+      if(userData.user.id){
+        onLoginSuccess();
+      }
       console.log('Login successful:', userData);
     } catch (err) {
       setError('Login failed. Please try again.');

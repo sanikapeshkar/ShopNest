@@ -38,7 +38,7 @@ const ProductCard = ({id, image, name, price, discount, originalPrice }) => {
 
       {isModalOpen && (
         <ProductModal
-          product={{ id,image, name, price, discount, originalPrice }}
+          product={{id,image, name, price, discount, originalPrice }}
           onClose={handleModalClose}
         />
       )}
