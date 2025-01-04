@@ -68,7 +68,7 @@ router.delete('/cart/:userId/remove/:itemId', async (req, res) => {
       return res.status(404).json({ message: 'Cart not found' });
     }
 
-    const itemIndex = cart.items.findIndex(item => item._id.toString() === req.params.itemId);
+    const itemIndex = cart.items.findIndex(item => item.productId.toString() === req.params.itemId);
     if (itemIndex === -1) {
       return res.status(404).json({ message: 'Item not found in cart' });
     }
