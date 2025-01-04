@@ -18,3 +18,8 @@ export const removeCartItem=async(userId,productId)=>{
     const response=await api.delete(`/cart/${userId}/${productId}`);
     return response.data;
 }
+
+export const checkoutCart=async(userId)=>{
+    const response=await api.post(`/cart/${userId}/checkout`);
+    return response.data;
+}

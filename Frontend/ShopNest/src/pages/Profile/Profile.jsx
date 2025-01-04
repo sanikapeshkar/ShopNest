@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import './Profile.css';
 import { getCartItems } from '../../services/cart.service';
+import OrderPopup from '../../components/OrderPopup/OrderPopup';
 
 const Profile = () => {
   const [cartItems, setCartItems] = useState([
   ]);
 
+  const [isOrderPopupOpen, setIsOrderPopupOpen] = useState(false);
   useEffect(()=>{
     const fetchCartItems=async()=>{
       const cartItems=await getCartItems();
@@ -34,8 +36,8 @@ const Profile = () => {
 
 
   const handleCheckout=()=>{
-    console.log('checkout');
-  }
+    setIsOrderPopupOpen(true);
+   }
   if (cartItems.length === 0) {
     return (
       <div className="profile-page">
@@ -108,9 +110,10 @@ const Profile = () => {
           <span>Total</span>
           <span>${calculateTotal().toFixed(2)}</span>
         </div>
-        <button className="checkout-btn">
+        <button className="checkout-btn" onClick={handleCheckout}>
           Proceed to Checkout
         </button>
+        {isOrderPopupOpen && <OrderPopup onClose={()=>setIsOrderPopupOpen(false)} onSubmit={handleCheckout} total={calculateTotal()}/>}
       </div>
     </div>
   );
