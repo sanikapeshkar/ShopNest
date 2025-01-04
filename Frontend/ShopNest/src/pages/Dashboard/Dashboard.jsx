@@ -1,17 +1,27 @@
 // Dashboard.jsx
-import React, { useContext, useState } from 'react';
-import ProductList from '../../components/ProductList/ProductList';
-import './Dashboard.css';
-import data from '../../dummyData/ProductListData';
-import Header from '../../components/Header/Header';
-import Login from '../Login/Login';
-import Signup from '../Login/Signup';
+import React, { useContext, useEffect, useState } from "react";
+import ProductList from "../../components/ProductList/ProductList";
+import "./Dashboard.css";
+import Header from "../../components/Header/Header";
+import Login from "../Login/Login";
+import Signup from "../Login/Signup";
 import Profile from '../Profile/Profile';
-import { AuthContext } from './AuthContext';
+import { AuthContext } from "../Login/AuthContext";
+import { getAllProducts } from "../../services/products.service";
 
 const Dashboard = () => {
-  const { isAuthenticated, loginPopup, setLoginPopup } = useContext(AuthContext);
+  const { isAuthenticated,setIsAuthenticated, loginPopup, setLoginPopup } =
+    useContext(AuthContext);
   const [signupPopup, setSignupPopup] = useState(false);
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const allproducts = await getAllProducts();
+      setProducts(allproducts);
+    };
+    fetchProducts();
+  }, []);
   const [showProfile, setShowProfile] = useState(false);
 
   const handleSignup = () => {
@@ -36,26 +46,31 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="dashboard">
+    <div className="app-container">
       <Header
         isAuthenticated={isAuthenticated}
         onLogin={() => setLoginPopup(true)}
         onLogout={() => setIsAuthenticated(false)}
-        onSignup={handleSignup}
         onCartClick={handleCartClick}
       />
       <main className="dashboard-main">
-        <ProductList products={data} />
+        <ProductList products={products} />
       </main>
 
       {/* Login Popup */}
       {loginPopup && (
         <div className="modal">
           <div className="modal-content">
-            <button className="close-button" onClick={() => setLoginPopup(false)}>
+            <button
+              className="close-button"
+              onClick={() => setLoginPopup(false)}
+            >
               ×
             </button>
-            <Login onLoginSuccess={() => setLoginPopup(false)} showSignupPopup={handleSignup} />
+            <Login
+              onLoginSuccess={() => setLoginPopup(false)}
+              showSignupPopup={handleSignup}
+            />
           </div>
         </div>
       )}
@@ -67,10 +82,28 @@ const Dashboard = () => {
             <button className="close-button" onClick={closeSignupPopup}>
               ×
             </button>
-            <Signup onSignupSuccess={onSignupSuccess} showLoginPopup={() => setLoginPopup(true)} />
+            <Signup 
+              onSignupSuccess={onSignupSuccess} 
+              showLoginPopup={() => {
+                setSignupPopup(false);
+                setLoginPopup(true);
+              }} 
+            />
           </div>
         </div>
       )}
+
+      {/* Profile Popup
+      {showProfile && (
+        <div className="modal">
+          <div className="modal-content">
+            <button className="close-button" onClick={closeProfile}>
+              ×
+            </button>
+            <Profile />
+          </div>
+        </div>
+      )} */}
 
       {/* Profile Popup */}
       {showProfile && (

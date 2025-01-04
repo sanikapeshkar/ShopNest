@@ -1,13 +1,15 @@
 // Modal.jsx
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import './Modal.css';
 import Button from '../Button/Button';
-import { AuthContext } from '../../pages/Dashboard/AuthContext';
+import { AuthContext } from '../../pages/Login/AuthContext';
+import { addToCart } from '../../services/cart.service';
 
 const Modal = ({ product, onClose }) => {
-  const { isAuthenticated, setLoginPopup } = useContext(AuthContext);
-
+  const [quantity,setQuantity]=useState(1);
+  const { isAuthenticated, setLoginPopup,userId } = useContext(AuthContext);
+  
   if (!product) return null;
 
   const discountedPrice = product.discount
@@ -18,6 +20,8 @@ const Modal = ({ product, onClose }) => {
     if (!isAuthenticated) {
       setLoginPopup(true)
       return;
+    }else{
+      addToCart({productId:product.id,quantity:quantity},userId);
     }
     console.log('Added to cart');
   };
