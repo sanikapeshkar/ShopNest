@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'https://b744-2401-4900-5610-f8c9-18f2-6849-a028-c29e.ngrok-free.app/api', // adjust this to your API base URL
+    baseURL: 'https://f697-2401-4900-560a-877e-496c-72a6-e7c-ee79.ngrok-free.app/api', // adjust this to your API base URL
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'ngrok-skip-browser-warning': 'true',  // Add this for ngrok
+        'ngrok-skip-browser-warning': 'true',  
         'Access-Control-Allow-Origin': '*'  
       }
 });
