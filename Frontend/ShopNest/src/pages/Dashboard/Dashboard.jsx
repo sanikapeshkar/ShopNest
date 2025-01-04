@@ -36,15 +36,14 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="dashboard">
+    <div className="app-container">
       <Header
         isAuthenticated={isAuthenticated}
         onLogin={() => setLoginPopup(true)}
         onLogout={() => setIsAuthenticated(false)}
-        onSignup={handleSignup}
         onCartClick={handleCartClick}
       />
-      <main className="dashboard-main">
+      <main className="main-content">
         <ProductList products={data} />
       </main>
 
@@ -55,7 +54,13 @@ const Dashboard = () => {
             <button className="close-button" onClick={() => setLoginPopup(false)}>
               ×
             </button>
-            <Login onLoginSuccess={() => setLoginPopup(false)} showSignupPopup={handleSignup} />
+            <Login 
+              onLoginSuccess={() => setLoginPopup(false)} 
+              showSignupPopup={() => {
+                setLoginPopup(false);
+                setSignupPopup(true);
+              }} 
+            />
           </div>
         </div>
       )}
@@ -67,7 +72,13 @@ const Dashboard = () => {
             <button className="close-button" onClick={closeSignupPopup}>
               ×
             </button>
-            <Signup onSignupSuccess={onSignupSuccess} showLoginPopup={() => setLoginPopup(true)} />
+            <Signup 
+              onSignupSuccess={onSignupSuccess} 
+              showLoginPopup={() => {
+                setSignupPopup(false);
+                setLoginPopup(true);
+              }} 
+            />
           </div>
         </div>
       )}
