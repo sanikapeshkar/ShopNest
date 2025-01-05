@@ -1,6 +1,6 @@
-const BASE_URL = process.env.BASE_URL || 'http://localhost:5000/api';
+// const BASE_URL = env.BASE_URL || 'http://localhost:5000/api';
 
-import axios from 'axios';
+import api from './api';
 
 export const getAllProducts = async () => {
   try {
@@ -14,7 +14,7 @@ export const getAllProducts = async () => {
 
 export const getProductById = async (id) => {
   try {
-    const response = await axios.get(`${BASE_URL}/products/${id}`);
+    const response = await api.get(`/products/${id}`);
     return response.data; 
   } catch (error) {
     console.error(`Error fetching product with id ${id}:`, error);

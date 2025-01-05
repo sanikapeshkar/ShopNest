@@ -1,6 +1,7 @@
 // Dashboard.jsx
 import React, { useContext, useEffect, useState } from "react";
 import ProductList from "../../components/ProductList/ProductList";
+import AdminDashboard from "../AdminDashboard/AdminDashboard";
 import "./Dashboard.css";
 import Header from "../../components/Header/Header";
 import Login from "../Login/Login";
@@ -10,7 +11,7 @@ import { AuthContext } from "../Login/AuthContext";
 import { getAllProducts } from "../../services/products.service";
 
 const Dashboard = () => {
-  const { isAuthenticated,setIsAuthenticated, loginPopup, setLoginPopup } =
+  const { isAuthenticated,setIsAuthenticated, loginPopup, setLoginPopup, userRole } =
     useContext(AuthContext);
   const [signupPopup, setSignupPopup] = useState(false);
   const [products, setProducts] = useState([]);
@@ -54,7 +55,11 @@ const Dashboard = () => {
         onCartClick={handleCartClick}
       />
       <main className="dashboard-main">
-        <ProductList products={products} />
+        {userRole === 'admin' ? (
+          <AdminDashboard />
+        ) : (
+          <ProductList products={products} />
+        )}
       </main>
 
       {/* Login Popup */}

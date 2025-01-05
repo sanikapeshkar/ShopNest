@@ -1,31 +1,20 @@
 import React, { createContext, useState } from 'react';
 
-export const AuthContext = createContext({
-  isAuthenticated: localStorage.getItem('token') ? true : false,
-  setIsAuthenticated: (value) => {},
-  loginPopup: false,
-  setLoginPopup: (value) => {}, 
-  userId: localStorage.getItem('userId') || null,
-  setUserId: (value) => {}, 
-});
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState( localStorage.getItem('token') ? true : false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loginPopup, setLoginPopup] = useState(false);
-  const [userId, setUserId] = useState(localStorage.getItem('userId') || null);
- 
-  return (
-    <AuthContext.Provider
-      value={{
-        isAuthenticated,
-        setIsAuthenticated,
-        loginPopup,
-        setLoginPopup,
-        userId,
-        setUserId,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+  const [userRole, setUserRole] = useState('user');
+
+  const value = {
+    isAuthenticated,
+    setIsAuthenticated,
+    loginPopup,
+    setLoginPopup,
+    userRole,
+    setUserRole
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

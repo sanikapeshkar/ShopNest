@@ -50,10 +50,6 @@ const AdminDashboard = () => {
 
   return (
     <div className="admin-dashboard">
-      <div className="admin-header">
-        <h1>Admin Dashboard</h1>
-      </div>
-
       <div className="admin-content">
         <div className="add-product-section">
           <h2>Add New Product</h2>
