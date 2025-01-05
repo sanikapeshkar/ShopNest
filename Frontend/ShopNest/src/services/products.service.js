@@ -21,3 +21,17 @@ export const getProductById = async (id) => {
     throw error; 
   }
 };
+
+
+export const addProduct=async(product)=>{
+  const userId=localStorage.getItem('userId');
+  console.log(product,'product');
+    const response=await api.post('/products',product);
+    return response.data;
+}
+
+export const deleteProduct=async(productId)=>{
+    const response=await api.delete(`/products/${productId}`);
+    return response.data;
+}
+

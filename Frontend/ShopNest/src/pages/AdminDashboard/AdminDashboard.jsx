@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './AdminDashboard.css';
-import data from '../../dummyData/ProductListData';
+import { addProduct,deleteProduct, getAllProducts } from '../../services/products.service';
 
 const AdminDashboard = () => {
-  const [products, setProducts] = useState(data);
+  const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState({
     name: '',
     price: '',
@@ -14,6 +14,14 @@ const AdminDashboard = () => {
     description: ''
   });
 
+
+  useEffect(()=>{
+    getAllProducts().then((data)=>{
+      setProducts(data);
+    }).catch((error)=>{
+      console.log(error);
+    });
+  },[]);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewProduct(prev => ({
@@ -32,20 +40,17 @@ const AdminDashboard = () => {
       discount: parseFloat(newProduct.discount)
     };
     setProducts([...products, productToAdd]);
-    // Reset form
-    setNewProduct({
-      name: '',
-      price: '',
-      originalPrice: '',
-      discount: '',
-      image: '',
-      category: '',
-      description: ''
-    });
+    addProduct(productToAdd);
+
   };
 
   const handleDelete = (productId) => {
-    setProducts(products.filter(product => product.id !== productId));
+    deleteProduct(productId);
+    getAllProducts().then((data)=>{
+      setProducts(data);
+    }).catch((error)=>{
+      console.log(error);
+    });
   };
 
   return (
@@ -145,14 +150,14 @@ const AdminDashboard = () => {
           <h2>Current Products</h2>
           <div className="products-grid">
             {products.map(product => (
-              <div key={product.id} className="product-item">
+              <div key={product._id} className="product-item">
                 <img src={product.image} alt={product.name} />
                 <div className="product-info">
                   <h3>{product.name}</h3>
                   <p>${product.price}</p>
                   <button 
                     className="delete-btn"
-                    onClick={() => handleDelete(product.id)}
+                    onClick={() => handleDelete(product._id)}
                   >
                     Delete
                   </button>
