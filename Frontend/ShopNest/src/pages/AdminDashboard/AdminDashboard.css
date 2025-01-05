@@ -4,10 +4,6 @@
   min-height: 100vh;
 }
 
-.admin-header {
-  margin-bottom: 2rem;
-}
-
 .admin-header h1 {
   color: var(--text-primary);
   font-size: 2rem;
@@ -35,13 +31,11 @@
 .add-product-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
 }
 
 .form-group label {

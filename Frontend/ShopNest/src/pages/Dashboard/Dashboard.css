@@ -6,7 +6,6 @@
 
 .dashboard-main {
   flex: 1;
-  padding: 2rem;
   background: linear-gradient(
     to bottom right,
     var(--secondary-color) 0%,

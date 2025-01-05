@@ -1,11 +1,10 @@
-
 import React, { useContext, useState } from 'react';
 import './Login.css'; 
 import { loginService } from '../../services/login.service';
 import { AuthContext } from './AuthContext';
 import { FiMail, FiLock } from 'react-icons/fi';
 const Login = ({ onLoginSuccess, showSignupPopup }) => {
-  const { setIsAuthenticated, setUserId } = useContext(AuthContext);
+  const { setIsAuthenticated, setUserRole } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -25,7 +24,7 @@ const Login = ({ onLoginSuccess, showSignupPopup }) => {
     try {
       const userData = await loginService.login(formData);
       setIsAuthenticated(true);
-      setUserId(userData.user.id);
+      setUserRole(userData.user.role);
 
       if(userData.user.id){
         onLoginSuccess();

@@ -2,13 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './Header.css';
 
-interface HeaderProps {
-  isAuthenticated: boolean;
-  onLogout: () => void;
-  onLogin: () => void;
-  onCartClick: () => void;
-}
-
 const CartIcon = () => (
   <svg 
     className="cart-icon" 
@@ -19,7 +12,7 @@ const CartIcon = () => (
   </svg>
 );
 
-const Header: React.FC<HeaderProps> = ({
+const Header = ({
   isAuthenticated,
   onLogout,
   onLogin,
