@@ -5,23 +5,29 @@ import userRoutes from "./routes/userRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import cors from "cors";
-
+import path from "path";
+import { fileURLToPath } from "url";
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// MongoDB connection URI
 const mongoURI = "mongodb://localhost:27017/Shopify";
 
 // CORS configuration
 const corsOptions = {
-  origin: 'http://localhost:5173', // Frontend URL
+  origin: 'http://localhost:5173', 
   credentials: true,
   optionsSuccessStatus: 200
 };
 
+
+// Fix for __dirname in ES Module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // Middleware
 app.use(cors(corsOptions));
 app.use(express.json()); // Uncomment if you're parsing JSON requests
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Database connection
 const connectToDatabase = async () => {
