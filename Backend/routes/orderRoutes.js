@@ -87,4 +87,35 @@ router.patch('/order/:orderId/return', async (req, res) => {
   }
 });
 
+// Get All Orders
+router.get('/orders', async (req, res) => {
+  try {
+    const orders = await Order.find()
+      .populate('userId', 'name email')
+      .populate('items.productId');
+    
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Get Orders by UserId
+router.get('/orders/user/:userId', async (req, res) => {
+  try {
+    const orders = await Order.find({ userId: req.params.userId })
+      .populate('userId', 'name email')
+      .populate('items.productId')
+      .sort({ createdAt: -1 });
+    
+    if (!orders.length) {
+      return res.status(404).json({ message: 'No orders found for this user' });
+    }
+
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 export default router;
