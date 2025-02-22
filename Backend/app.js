@@ -10,7 +10,7 @@ import { fileURLToPath } from "url";
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-const mongoURI = "mongodb://localhost:27017/Shopify";
+const mongoURI = "mongodb+srv://Sanika:Sanika@shopnest.6kjvv.mongodb.net/?retryWrites=true&w=majority&appName=ShopNest";
 
 // CORS configuration
 const corsOptions = {
@@ -24,9 +24,8 @@ const corsOptions = {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Middleware
 app.use(cors(corsOptions));
-app.use(express.json()); // Uncomment if you're parsing JSON requests
+app.use(express.json()); 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Database connection
