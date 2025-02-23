@@ -27,6 +27,7 @@ export const addProduct=async(product)=>{
   const userId=localStorage.getItem('userId');
   console.log(product,'product');
     const response=await api.post('/products',product);
+    
     return response.data;
 }
 

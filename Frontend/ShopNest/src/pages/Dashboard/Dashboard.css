@@ -6,12 +6,6 @@
 
 .dashboard-main {
   flex: 1;
-  background: linear-gradient(
-    to bottom right,
-    var(--secondary-color) 0%,
-    var(--accent-color) 50%,
-    var(--background-color) 100%
-  );
 }
 
 .modal {
@@ -29,14 +23,14 @@
 
 .modal-content {
   background-color: white;
-  padding: 30px;
+  padding: 20px ;
   border-radius: 15px;
   box-shadow: 0 4px 20px rgba(141, 119, 171, 0.2);
-  width: 80%;
+  width: 50%;
   max-width: 1000px;
-  max-height: 90vh;
   overflow-y: auto;
   position: relative;
+  justify-content: center;
 }
 
 .close-button {

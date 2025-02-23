@@ -8,6 +8,8 @@ export const loginService = {
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('userId', response.data.user.id);
             }
+            console.log("gcsavjc", response.data);
+            
             return response.data;
         } catch (error) {
             throw error;

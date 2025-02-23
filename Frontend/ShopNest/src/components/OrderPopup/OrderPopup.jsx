@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./OrderPopup.css";
 import { placeOrder } from "../../services/order.service";
+import Button from '../Button/Button'
 
 const paymentMethods = [
   { id: "credit", label: "Credit Card" },
@@ -72,12 +73,12 @@ const OrderPopup = ({ onClose, onSubmit, total }) => {
           </div>
 
           <div className="button-group">
-            <button type="button" className="cancel-button" onClick={onClose}>
+            <Button type="button" className="cancel-button" onClick={onClose}>
               Cancel
-            </button>
-            <button type="submit" className="submit-button" onClick={handlePlaceOrder}>
+            </Button>
+            <Button type="submit" className="submit-button" onClick={handlePlaceOrder}>
               Place Order
-            </button>
+            </Button>
           </div>
         </form>
       </div>

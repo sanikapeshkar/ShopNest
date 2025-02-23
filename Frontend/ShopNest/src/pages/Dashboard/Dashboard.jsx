@@ -1,64 +1,113 @@
-// Dashboard.jsx
 import React, { useContext, useEffect, useState } from "react";
 import ProductList from "../../components/ProductList/ProductList";
 import AdminDashboard from "../AdminDashboard/AdminDashboard";
-import "./Dashboard.css";
 import Header from "../../components/Header/Header";
 import Login from "../Login/Login";
 import Signup from "../Login/Signup";
-import Profile from '../Profile/Profile';
-import { AuthContext } from "../Login/AuthContext";
+import Profile from "../Profile/Profile";
+import OrderHistory from "../../components/OrderHistory/OrderHistory";
+import { AuthContext, useAuthProvider } from "../Login/AuthContext";
 import { getAllProducts } from "../../services/products.service";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./Dashboard.css";
 
 const Dashboard = () => {
-  const { isAuthenticated,setIsAuthenticated, loginPopup, setLoginPopup, userRole } =
-    useContext(AuthContext);
+  const {
+    isAuthenticated,
+    setIsAuthenticated,
+    loginPopup,
+    setLoginPopup,
+    userRole,
+    setUserRole,
+  } = useContext(AuthContext);
+
   const [signupPopup, setSignupPopup] = useState(false);
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [showProfile, setShowProfile] = useState(false);
+  const [showOrderHistory, setShowOrderHistory] = useState(false);
 
+  // Fetch all products on component mount
   useEffect(() => {
     const fetchProducts = async () => {
-      const allproducts = await getAllProducts();
-      setProducts(allproducts);
+      try {
+        const allProducts = await getAllProducts();
+        setProducts(allProducts);
+      } catch (error) {
+        toast.error("Failed to fetch products.");
+      }
     };
     fetchProducts();
   }, []);
-  const [showProfile, setShowProfile] = useState(false);
 
   const handleSignup = () => {
     setSignupPopup(true);
     setLoginPopup(false);
   };
 
-  const closeSignupPopup = () => {
-    setSignupPopup(false);
-  };
+  const closeSignupPopup = () => setSignupPopup(false);
 
   const onSignupSuccess = () => {
     setSignupPopup(false);
+    toast.success("Signup successful! Please log in.");
   };
 
-  const handleCartClick = () => {
-    setShowProfile(true);
+  const handleLoginSuccess = () => {
+    setLoginPopup(false);
+    toast.success("Login successful!");
   };
 
-  const closeProfile = () => {
-    setShowProfile(false);
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setUserRole(null);
+    toast.info("Logged out successfully.");
+  };
+
+  const handleProfileClick = () => setShowProfile(true);
+  const closeProfile = () => setShowProfile(false);
+
+  const displayOrderHistory = () => setShowOrderHistory(true);
+  const closeOrderHistory = () => setShowOrderHistory(false);
+
+  const handleSearchProducts = (searchTerm) => {
+    if (!searchTerm) {
+      setFilteredProducts(products);
+      toast.info("Showing all products.");
+    } else {
+      const filtered = products.filter((product) =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredProducts(filtered);
+
+      if (filtered.length > 0) {
+        toast.success(`Found ${filtered.length} matching products.`);
+      } else {
+        toast.warning("No matching products found.");
+      }
+    }
   };
 
   return (
     <div className="app-container">
       <Header
         isAuthenticated={isAuthenticated}
+        isAdmin={userRole}
         onLogin={() => setLoginPopup(true)}
-        onLogout={() => setIsAuthenticated(false)}
-        onCartClick={handleCartClick}
+        onLogout={handleLogout}
+        onCartClick={handleProfileClick}
+        onProfileClick={displayOrderHistory}
+        onSearchProducts={handleSearchProducts}
       />
+
       <main className="dashboard-main">
-        {userRole === 'admin' ? (
+        {userRole === "admin" ? (
           <AdminDashboard />
         ) : (
-          <ProductList products={products} />
+          <ProductList
+            products={filteredProducts.length > 0 ? filteredProducts : products}
+          />
         )}
       </main>
 
@@ -66,16 +115,10 @@ const Dashboard = () => {
       {loginPopup && (
         <div className="modal">
           <div className="modal-content">
-            <button
-              className="close-button"
-              onClick={() => setLoginPopup(false)}
-            >
+            <button className="close-button" onClick={() => setLoginPopup(false)}>
               ×
             </button>
-            <Login
-              onLoginSuccess={() => setLoginPopup(false)}
-              showSignupPopup={handleSignup}
-            />
+            <Login onLoginSuccess={handleLoginSuccess} showSignupPopup={handleSignup} />
           </div>
         </div>
       )}
@@ -87,18 +130,17 @@ const Dashboard = () => {
             <button className="close-button" onClick={closeSignupPopup}>
               ×
             </button>
-            <Signup 
-              onSignupSuccess={onSignupSuccess} 
+            <Signup
+              onSignupSuccess={onSignupSuccess}
               showLoginPopup={() => {
                 setSignupPopup(false);
                 setLoginPopup(true);
-              }} 
+              }}
             />
           </div>
         </div>
       )}
 
-      {/* Profile Popup
       {showProfile && (
         <div className="modal">
           <div className="modal-content">
@@ -108,16 +150,15 @@ const Dashboard = () => {
             <Profile />
           </div>
         </div>
-      )} */}
+      )}
 
-      {/* Profile Popup */}
-      {showProfile && (
+      {showOrderHistory && (
         <div className="modal">
           <div className="modal-content">
-            <button className="close-button" onClick={closeProfile}>
+            <button className="close-button" onClick={closeOrderHistory}>
               ×
             </button>
-            <Profile />
+            <OrderHistory />
           </div>
         </div>
       )}
@@ -125,4 +166,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default useAuthProvider(Dashboard);

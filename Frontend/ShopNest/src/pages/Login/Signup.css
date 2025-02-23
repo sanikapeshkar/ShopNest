@@ -1,4 +1,10 @@
 /* Signup.css */
+
+.auth-form-container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .signup-container {
     max-width: 400px;
     margin: 50px auto;
