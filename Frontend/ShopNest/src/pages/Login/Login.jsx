@@ -103,7 +103,7 @@ const Login = ({ onLoginSuccess, showSignupPopup }) => {
           </span>
         </div>
       </div>
-      <img src='/login.png' alt='login' height={500} width={400} />
+      <img src='/login.png' alt='login' />
     </div>
   );
 };

@@ -1,73 +1,45 @@
-import React, { useEffect, useState } from "react";
-import "./Profile.css";
-import {
-  getCartItems,
-  removeCartItem,
-  updateQuantity,
-} from "../../services/cart.service";
-import OrderPopup from "../../components/OrderPopup/OrderPopup";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import React, { useEffect, useState } from 'react';
+import './Profile.css';
+import { getCartItems, removeCartItem, updateQuantity } from '../../services/cart.service';
+import OrderPopup from '../../components/OrderPopup/OrderPopup';
 
 const Profile = () => {
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState([
+  ]);
+
   const [isOrderPopupOpen, setIsOrderPopupOpen] = useState(false);
+  const fetchCartItems=async()=>{
+    const cartItems=await getCartItems();
+    setCartItems(cartItems);
+  }
+  useEffect(()=>{
 
-  const fetchCartItems = async () => {
-    try {
-      const cartItems = await getCartItems();
-      setCartItems(cartItems);
-    } catch (error) {
-      toast.error("Failed to fetch cart items.");
-    }
-  };
-
-  useEffect(() => {
     fetchCartItems();
-  }, []);
+  },[]);
 
-  const removeItem = async (id) => {
-    try {
-      await removeCartItem(id);
-      fetchCartItems();
-      toast.success("Item removed from cart.");
-    } catch (error) {
-      toast.error("Failed to remove item.");
-    }
-  };
-
-  const handleQuantityChange = async (id, change) => {
-    try {
-      await updateQuantity(id, change);
-      fetchCartItems();
-      toast.info(`Quantity ${change > 0 ? "increased" : "decreased"}.`);
-    } catch (error) {
-      toast.error("Failed to update quantity.");
-    }
+  const removeItem = (id) => {
+    setCartItems(items => items.filter(item => item.id !== id));
   };
 
   const calculateTotal = () => {
-    return cartItems.reduce(
-      (total, item) => total + (item.productId?.price * item?.quantity),
-      0
-    );
+    return cartItems.reduce((total, item) => total + (item.productId?.price * item?.quantity), 0);
   };
 
-  const handleCheckout = () => {
+
+  const handleCheckout=()=>{
     setIsOrderPopupOpen(true);
-    toast.success("Proceeding to checkout.");
-  };
-
+   }
   if (cartItems.length === 0) {
     return (
       <div className="profile-page">
         <div className="cart-empty">
           <h2>Your cart is empty</h2>
-          <p>Add items to your cart to see them here.</p>
+          <p>Add items to your cart to see them here</p>
         </div>
       </div>
     );
   }
+console.log("cartItems hbdchjfsdrj", cartItems);
 
   return (
     <div className="profile-page">
@@ -78,43 +50,35 @@ const Profile = () => {
       <div className="cart-items">
         {cartItems.map((item) => (
           <div key={item.productId?._id} className="cart-item">
-            <img
-              src={item.productId?.image}
-              alt={item.productId?.name}
-              className="cart-item-image"
-            />
+            <img src={item.productId?.image} alt={item.productId?.name} className="cart-item-image" />
             <div className="cart-item-details">
               <div>
                 <h3 className="cart-item-name">{item.productId?.name}</h3>
-                <p className="cart-item-price">
-                  ${item.productId?.price.toFixed(2)}
-                </p>
+                <p className="cart-item-price">${item.productId?.price.toFixed(2)}</p>
                 <p className="cart-item-original-price">
                   ${item.productId?.originalPrice.toFixed(2)}
                 </p>
-                <p className="cart-item-discount">
-                  {item.productId?.discount}% OFF
-                </p>
+                <p className="cart-item-discount">{item.productId?.discount}% OFF</p>
               </div>
               <div className="cart-item-actions">
                 <div className="quantity-controls">
-                  <button
+                  <button 
                     className="quantity-btn"
-                    onClick={() => handleQuantityChange(item?._id, -1)}
+                    onClick={() => {updateQuantity(item?._id, -1);fetchCartItems();}}
                   >
                     -
                   </button>
                   <span className="quantity-value">{item?.quantity}</span>
-                  <button
+                  <button 
                     className="quantity-btn"
-                    onClick={() => handleQuantityChange(item?._id, 1)}
+                    onClick={() => {updateQuantity(item?._id, 1);fetchCartItems();}}
                   >
                     +
                   </button>
                 </div>
-                <button
+                <button 
                   className="remove-btn"
-                  onClick={() => removeItem(item?._id)}
+                  onClick={() => {removeCartItem(item?._id);fetchCartItems();}}
                 >
                   Remove
                 </button>
@@ -141,13 +105,7 @@ const Profile = () => {
         <button className="checkout-btn" onClick={handleCheckout}>
           Proceed to Checkout
         </button>
-        {isOrderPopupOpen && (
-          <OrderPopup
-            onClose={() => setIsOrderPopupOpen(false)}
-            onSubmit={handleCheckout}
-            total={calculateTotal()}
-          />
-        )}
+        {isOrderPopupOpen && <OrderPopup onClose={()=>setIsOrderPopupOpen(false)} onSubmit={handleCheckout} total={calculateTotal()}/>}
       </div>
     </div>
   );

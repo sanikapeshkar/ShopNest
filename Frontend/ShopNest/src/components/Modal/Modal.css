@@ -17,6 +17,7 @@
   position: relative;
   width: 90%;
   max-width: 400px;
+  max-height: 90vh;
   box-shadow: 0 4px 20px rgba(141, 119, 171, 0.2);
 }
 

@@ -1,6 +1,8 @@
 .profile-page {
   max-width: 100%;
   margin: 0 auto;
+  padding: 60px 0px;
+  max-height: 90vh;
 }
 
 .profile-header {

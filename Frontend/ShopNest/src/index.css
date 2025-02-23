@@ -30,13 +30,8 @@ body {
 }
 
 .app-container {
-  min-height: 100vh;
-  background: linear-gradient(
-    135deg,
-    var(--secondary-color) 0%,
-    var(--accent-color) 50%,
-    var(--background-color) 100%
-  );
+  min-height: 96vh;
+  max-height: 96vh;
 }
 
 .main-content {
