@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { ToastContainer } from "react-toastify";
 import "./AdminDashboard.css";
 import {
   addProduct,
   deleteProduct,
   getAllProducts,
 } from "../../services/products.service";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AdminDashboard = () => {
   const [products, setProducts] = useState([]);
@@ -75,20 +78,30 @@ const AdminDashboard = () => {
           description: "",
         });
         setErrors({});
+        toast.success("Product added successfully! 🎉");
+      })
+      .catch(() => {
+        toast.error("Error adding product. Try again! ❌");
       })
       .finally(() => setIsSubmitting(false));
   };
 
   const handleDelete = (productId) => {
-    deleteProduct(productId).then(() => {
-      getAllProducts()
-        .then((data) => setProducts(data))
-        .catch((error) => console.log(error));
-    });
+    deleteProduct(productId)
+      .then(() => {
+        getAllProducts()
+          .then((data) => setProducts(data))
+          .catch((error) => console.log(error));
+        toast.success("Product deleted successfully! 🗑️");
+      })
+      .catch(() => {
+        toast.error("Error deleting product. Try again! ❌");
+      });
   };
 
   return (
     <div className="admin-dashboard">
+      <ToastContainer position="top-right" autoClose={3000} />
       <div className="admin-content">
         <div className="add-product-section">
           <h2>Add New Product</h2>
