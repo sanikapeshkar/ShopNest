@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import './ProductModal.css';
 import { addToCart } from '../../services/cart.service';
-
-const ProductModal = ({ product, onClose,userId }) => {
+import { toast } from 'react-toastify'; // Import toast
+import 'react-toastify/dist/ReactToastify.css';
+const ProductModal = ({ product, onClose, userId }) => {
   const [quantity, setQuantity] = useState(1);
 
   const handleIncrement = () => {
@@ -15,14 +16,30 @@ const ProductModal = ({ product, onClose,userId }) => {
     }
   };
 
-  const handleAddToCart=async()=>{
-    const cartData={
-      productId:product.id,
-      quantity:quantity
+  const handleAddToCart = async () => {
+    console.log("🛒 Attempting to add item to cart...");
+
+    if (!userId) {
+      toast.error("Please login first to add items to the cart.");
+      return;
     }
-    await addToCart(cartData,userId);
-    onClose();
-  }
+
+    try {
+      const cartData = {
+        productId: product.id,
+        quantity: quantity,
+      };
+
+      await addToCart(cartData, userId);
+      toast.success("Item added to cart successfully!");
+
+      onClose();
+    } catch (error) {
+      console.error("❌ Error adding item to cart:", error);
+      toast.error("Failed to add item to cart. Please try again.");
+    }
+  };
+
 
   const discountedPrice = product.discount
     ? (product.originalPrice - (product.originalPrice * product.discount) / 100).toFixed(2)
@@ -32,15 +49,15 @@ const ProductModal = ({ product, onClose,userId }) => {
     <div className="product-modal-overlay" onClick={onClose}>
       <div className="product-modal" onClick={e => e.stopPropagation()}>
         <button className="modal-close" onClick={onClose}>&times;</button>
-        
+
         <div className="modal-content">
           <div className="modal-image-container">
             <img src={product.image} alt={product.name} className="modal-image" />
           </div>
-          
+
           <div className="modal-details">
             <h2 className="modal-title">{product.name}</h2>
-            
+
             <div className="modal-price-container">
               <span className="modal-price">${discountedPrice}</span>
               {product.discount && (
@@ -56,7 +73,7 @@ const ProductModal = ({ product, onClose,userId }) => {
             </div>
 
             <div className="quantity-controls">
-              <button 
+              <button
                 className="quantity-btn"
                 onClick={handleDecrement}
                 disabled={quantity === 1}
@@ -64,7 +81,7 @@ const ProductModal = ({ product, onClose,userId }) => {
                 -
               </button>
               <span className="quantity-display">{quantity}</span>
-              <button 
+              <button
                 className="quantity-btn"
                 onClick={handleIncrement}
               >

@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import "./OrderPopup.css";
 import { placeOrder } from "../../services/order.service";
-import Button from '../Button/Button'
+import Button from "../Button/Button";
+import { toast } from "react-toastify"; // Import toast
+import "react-toastify/dist/ReactToastify.css"; // Import styles
 
 const paymentMethods = [
   { id: "credit", label: "Credit Card" },
@@ -15,10 +17,22 @@ const OrderPopup = ({ onClose, onSubmit, total }) => {
     shippingAddress: "",
     paymentMethod: "",
   });
+
   const handlePlaceOrder = async () => {
-    await placeOrder(shippingDetails);  
-    onClose();
+    if (!shippingDetails.shippingAddress || !shippingDetails.paymentMethod) {
+      toast.error("Please fill in all fields.");
+      return;
+    }
+
+    try {
+      await placeOrder(shippingDetails);
+      toast.success("Order placed successfully!");
+      onClose();
+    } catch (error) {
+      toast.error("Failed to place order. Please try again.");
+    }
   };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setShippingDetails((prev) => ({
