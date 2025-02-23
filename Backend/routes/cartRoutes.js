@@ -16,10 +16,24 @@ router.get('/cart/:userId', async (req, res) => {
 
     // Filter out items where the product no longer exists
     cart.items = cart.items.filter(item => item.productId != null);
-    
-    // Save the cart if any items were filtered out
+
+    // Group items by productId and sum their quantities
+    const groupedItems = cart.items.reduce((acc, item) => {
+      const existingItem = acc.find(i => i.productId.toString() === item.productId.toString());
+      if (existingItem) {
+        existingItem.quantity += item.quantity;
+      } else {
+        acc.push(item);
+      }
+      return acc;
+    }, []);
+
+    // Replace cart items with grouped items
+    cart.items = groupedItems;
+
+    // Save the cart if any items were filtered out or grouped
     await cart.save();
-    
+
     res.json(cart);
   } catch (error) {
     res.status(500).json({ message: error.message });
