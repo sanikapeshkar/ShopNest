@@ -1,55 +1,89 @@
-import React, { useEffect, useState } from 'react';
-import './AdminDashboard.css';
-import { addProduct,deleteProduct, getAllProducts } from '../../services/products.service';
+import React, { useEffect, useState } from "react";
+import "./AdminDashboard.css";
+import {
+  addProduct,
+  deleteProduct,
+  getAllProducts,
+} from "../../services/products.service";
 
 const AdminDashboard = () => {
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState({
-    name: '',
-    price: '',
-    originalPrice: '',
-    discount: '',
-    image: '',
-    category: '',
-    description: ''
+    name: "",
+    price: "",
+    stock: "",
+    discount: "",
+    image: "",
+    description: "",
   });
 
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(()=>{
-    getAllProducts().then((data)=>{
-      setProducts(data);
-    }).catch((error)=>{
-      console.log(error);
-    });
-  },[]);
+  useEffect(() => {
+    getAllProducts()
+      .then((data) => setProducts(data))
+      .catch((error) => console.log(error));
+  }, []);
+
+  const validateForm = () => {
+    let tempErrors = {};
+    if (!newProduct.name.trim()) tempErrors.name = "Product name is required.";
+    if (!newProduct.price || newProduct.price <= 0)
+      tempErrors.price = "Valid price is required.";
+    if (!newProduct.stock || newProduct.stock < 0)
+      tempErrors.stock = "Valid stock is required.";
+    if (newProduct.discount < 0 || newProduct.discount > 100)
+      tempErrors.discount = "Discount must be between 0 and 100.";
+    if (!newProduct.image.trim()) tempErrors.image = "Image URL is required.";
+    if (!newProduct.description.trim())
+      tempErrors.description = "Description is required.";
+
+    setErrors(tempErrors);
+    return Object.keys(tempErrors).length === 0;
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewProduct(prev => ({
+    setNewProduct((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
     const productToAdd = {
       ...newProduct,
-      id: products.length + 1,
       price: parseFloat(newProduct.price),
-      originalPrice: parseFloat(newProduct.originalPrice),
-      discount: parseFloat(newProduct.discount)
+      stock: parseInt(newProduct.stock),
+      discount: parseFloat(newProduct.discount),
     };
-    setProducts([...products, productToAdd]);
-    addProduct(productToAdd);
 
+    addProduct(productToAdd)
+      .then(() => {
+        setProducts([...products, productToAdd]);
+        setNewProduct({
+          name: "",
+          price: "",
+          stock: "",
+          discount: "",
+          image: "",
+          description: "",
+        });
+        setErrors({});
+      })
+      .finally(() => setIsSubmitting(false));
   };
 
   const handleDelete = (productId) => {
-    deleteProduct(productId);
-    getAllProducts().then((data)=>{
-      setProducts(data);
-    }).catch((error)=>{
-      console.log(error);
+    deleteProduct(productId).then(() => {
+      getAllProducts()
+        .then((data) => setProducts(data))
+        .catch((error) => console.log(error));
     });
   };
 
@@ -69,6 +103,7 @@ const AdminDashboard = () => {
                 onChange={handleInputChange}
                 required
               />
+              {errors.name && <p className="error">{errors.name}</p>}
             </div>
 
             <div className="form-row">
@@ -82,17 +117,20 @@ const AdminDashboard = () => {
                   onChange={handleInputChange}
                   required
                 />
+                {errors.price && <p className="error">{errors.price}</p>}
               </div>
 
               <div className="form-group">
-                <label htmlFor="originalPrice">Original Price</label>
+                <label htmlFor="stock">Stock</label>
                 <input
                   type="number"
-                  id="originalPrice"
-                  name="originalPrice"
-                  value={newProduct.originalPrice}
+                  id="stock"
+                  name="stock"
+                  value={newProduct.stock}
                   onChange={handleInputChange}
+                  required
                 />
+                {errors.stock && <p className="error">{errors.stock}</p>}
               </div>
 
               <div className="form-group">
@@ -104,6 +142,7 @@ const AdminDashboard = () => {
                   value={newProduct.discount}
                   onChange={handleInputChange}
                 />
+                {errors.discount && <p className="error">{errors.discount}</p>}
               </div>
             </div>
 
@@ -117,18 +156,7 @@ const AdminDashboard = () => {
                 onChange={handleInputChange}
                 required
               />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="category">Category</label>
-              <input
-                type="text"
-                id="category"
-                name="category"
-                value={newProduct.category}
-                onChange={handleInputChange}
-                required
-              />
+              {errors.image && <p className="error">{errors.image}</p>}
             </div>
 
             <div className="form-group">
@@ -140,22 +168,29 @@ const AdminDashboard = () => {
                 onChange={handleInputChange}
                 rows="4"
               />
+              {errors.description && <p className="error">{errors.description}</p>}
             </div>
 
-            <button type="submit" className="submit-btn">Add Product</button>
+            <button
+              type="submit"
+              className="submit-btn"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Adding..." : "Add Product"}
+            </button>
           </form>
         </div>
 
         <div className="product-list-section">
           <h2>Current Products</h2>
           <div className="products-grid">
-            {products.map(product => (
+            {products.map((product) => (
               <div key={product._id} className="product-item">
                 <img src={product.image} alt={product.name} />
                 <div className="product-info">
                   <h3>{product.name}</h3>
                   <p>${product.price}</p>
-                  <button 
+                  <button
                     className="delete-btn"
                     onClick={() => handleDelete(product._id)}
                   >
@@ -171,4 +206,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard; 
+export default AdminDashboard;

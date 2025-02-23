@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'https://5edb-117-99-242-198.ngrok-free.app/api', // adjust this to your API base URL
+    baseURL: 'https://shopnest-urg5.onrender.com/api', // adjust this to your API base URL
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',

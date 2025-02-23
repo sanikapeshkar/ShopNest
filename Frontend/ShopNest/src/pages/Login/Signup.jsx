@@ -29,6 +29,7 @@ const Signup = ({ onSignupSuccess, showLoginPopup }) => {
   };
 
   return (
+    <div className='auth-form-container'>
     <div className="auth-modal">
       <div className="auth-header">
         <h2 className="auth-title">Create Account</h2>
@@ -102,6 +103,8 @@ const Signup = ({ onSignupSuccess, showLoginPopup }) => {
         </span>
       </div>
     </div>
+    <img src='/login.png' alt='login' height={500} width={400} />
+</div>
   );
 };
 

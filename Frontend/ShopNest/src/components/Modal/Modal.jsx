@@ -5,10 +5,11 @@ import './Modal.css';
 import Button from '../Button/Button';
 import { AuthContext } from '../../pages/Login/AuthContext';
 import { addToCart } from '../../services/cart.service';
+import Login from '../../pages/Login/Login';
 
 const Modal = ({ product, onClose }) => {
   const [quantity,setQuantity]=useState(1);
-  const { isAuthenticated, setLoginPopup,userId } = useContext(AuthContext);
+  const { isAuthenticated, setLoginPopup,userId,loginPopup } = useContext(AuthContext);
   
   if (!product) return null;
 
@@ -25,6 +26,10 @@ const Modal = ({ product, onClose }) => {
     }
     console.log('Added to cart');
   };
+   // If login popup is open, render Login component
+   if (loginPopup) {
+    return <Login />;
+  }
 
   return (
     <div className="modal-overlay" onClick={onClose}>

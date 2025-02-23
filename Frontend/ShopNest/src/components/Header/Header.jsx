@@ -14,15 +14,31 @@ const CartIcon = () => (
 
 const Header = ({
   isAuthenticated,
+  isAdmin,
   onLogout,
   onLogin,
   onCartClick,
+  onProfileClick,
+  onSearchProducts
 }) => {
-  const [showCart, setShowCart] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  // const [showCart, setShowCart] = useState(false);
+  // const [showOrderHistory, setShowOrderHistory] = useState(false);
 
   const displayCart = () => {
-    setShowCart(true);
+    // setShowCart(true);
     onCartClick();
+  }; 
+
+  const displayProfile = () => {
+    // setShowOrderHistory(true); 
+    onProfileClick(); 
+  };
+
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    onSearchProducts(value);
   };
 
   return (
@@ -37,6 +53,8 @@ const Header = ({
           placeholder="Search products..."
           className="header-search-input"
           aria-label="Search products"
+          value={searchTerm}
+          onChange={handleSearch}
         />
       </div>
       
@@ -53,6 +71,7 @@ const Header = ({
             <button onClick={displayCart}>
               <CartIcon /> Cart
             </button>
+            { isAdmin !== 'admin' && <button onClick={displayProfile}>Profile</button> }
             <button onClick={onLogout}>Logout</button>
           </>
         )}
@@ -66,6 +85,7 @@ Header.propTypes = {
   onLogout: PropTypes.func.isRequired,
   onLogin: PropTypes.func.isRequired,
   onCartClick: PropTypes.func.isRequired,
+  onSearchProducts: PropTypes.func.isRequired,
 };
 
 export default Header;
