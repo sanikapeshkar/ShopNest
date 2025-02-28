@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import './ProductCard.css';
 import ProductModal from '../ProductModal/ProductModal';
+import { AuthContext } from '../../pages/Login/AuthContext';
 
 const ProductCard = ({ id, image, name, price, discount, originalPrice }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const userId = localStorage.getItem('userId') || null; // Handle null case
+  const userId = localStorage.getItem('userId') || null; 
+   const {
+      isAuthenticated
+    } = useContext(AuthContext);
 
   const handleCardClick = () => {
     console.log("Clicked product:", { id, name, price }); // Debugging log
@@ -22,7 +26,7 @@ const ProductCard = ({ id, image, name, price, discount, originalPrice }) => {
     <>
       <div className="product-card" onClick={handleCardClick}>
         <img 
-          src={image || "/placeholder-image.png"}  // Default image fallback
+          src={image||`https://shopnest-urg5.onrender.com/${image}`}
           alt={name} 
           className="product-card-image" 
         />
@@ -45,6 +49,7 @@ const ProductCard = ({ id, image, name, price, discount, originalPrice }) => {
           product={{ id, image, name, price, discount, originalPrice }}
           onClose={handleModalClose}
           userId={userId}
+          isAuthenticated={isAuthenticated}
         />
       )}
     </>

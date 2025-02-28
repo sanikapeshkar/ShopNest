@@ -20,7 +20,7 @@ const Header = ({
   onSearchProducts,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
-
+console.log(isAuthenticated,isAdmin);
   const displayCart = () => {
     onCartClick();
   };

@@ -3,7 +3,7 @@ import './ProductModal.css';
 import { addToCart } from '../../services/cart.service';
 import { toast } from 'react-toastify'; // Import toast
 import 'react-toastify/dist/ReactToastify.css';
-const ProductModal = ({ product, onClose, userId }) => {
+const ProductModal = ({ product, onClose, userId ,isAuthenticated})=>{
   const [quantity, setQuantity] = useState(1);
 
   const handleIncrement = () => {
@@ -19,7 +19,7 @@ const ProductModal = ({ product, onClose, userId }) => {
   const handleAddToCart = async () => {
     console.log("🛒 Attempting to add item to cart...");
 
-    if (!userId) {
+    if (!isAuthenticated){
       toast.error("Please login first to add items to the cart.");
       return;
     }

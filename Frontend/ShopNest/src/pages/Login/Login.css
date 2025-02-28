@@ -146,15 +146,21 @@
 
 .auth-form-container img {
   flex: 1;
-  height:300px;
+ max-height:500px;
+}
+.auth-modal{
+  flex:1;
 }
 
 .auth-form {
-  flex: 1;
   display: flex;
   flex-direction: column;
   gap: .5rem;
-  margin-top: 1rem;
+  margin: 1rem;
+}
+
+.auth-header{
+  margin:1rem;
 }
 
 .form-group {
