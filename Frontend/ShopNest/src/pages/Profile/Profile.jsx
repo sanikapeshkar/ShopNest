@@ -2,15 +2,23 @@ import React, { useEffect, useState } from 'react';
 import './Profile.css';
 import { getCartItems, removeCartItem, updateQuantity } from '../../services/cart.service';
 import OrderPopup from '../../components/OrderPopup/OrderPopup';
+import { Loader } from '../../components/Loader/Loader';
 
 const Profile = () => {
   const [cartItems, setCartItems] = useState([]);
   const [isOrderPopupOpen, setIsOrderPopupOpen] = useState(false);
-  const [isCartVisible, setIsCartVisible] = useState(true); // New state to control cart visibility
+  const [isCartVisible, setIsCartVisible] = useState(true);
+  const [loading, setLoading] = useState(true); 
 
   const fetchCartItems = async () => {
-    const cartItems = await getCartItems();
-    setCartItems(cartItems);
+    setLoading(true);
+    try {
+      const cartItems = await getCartItems();
+      setCartItems(cartItems);
+    } catch (error) {
+      console.error("Failed to fetch cart items:", error);
+    }
+    setLoading(false); 
   };
 
   useEffect(() => {
@@ -27,8 +35,14 @@ const Profile = () => {
 
   const handleCheckout = () => {
     setIsOrderPopupOpen(true);
-    setIsCartVisible(false); // Hide the cart when order popup opens
+    setIsCartVisible(false);
   };
+
+  if (loading) {
+    return (
+   <Loader/>
+    );
+  }
 
   if (cartItems.length === 0 && isCartVisible) {
     return (
@@ -41,15 +55,12 @@ const Profile = () => {
     );
   }
 
-  console.log("cartItems:", cartItems);
-
   return (
     <div className="profile-page">
       <header className="profile-header">
         <h1 className="profile-title">Your Shopping Cart</h1>
       </header>
 
-      {/* Show cart only when isCartVisible is true */}
       {isCartVisible && (
         <div className="cart-items">
           {cartItems.map((item) => (
@@ -59,40 +70,29 @@ const Profile = () => {
                 <div>
                   <h3 className="cart-item-name">{item.productId?.name}</h3>
                   <p className="cart-item-price">${item.productId?.price.toFixed(2)}</p>
-                  <p className="cart-item-original-price">
-                    ${item.productId?.originalPrice.toFixed(2)}
-                  </p>
+                  <p className="cart-item-original-price">${item.productId?.originalPrice.toFixed(2)}</p>
                   <p className="cart-item-discount">{item.productId?.discount}% OFF</p>
                 </div>
                 <div className="cart-item-actions">
                   <div className="quantity-controls">
-                    <button
-                      className="quantity-btn"
-                      onClick={() => {
-                        updateQuantity(item?._id, -1);
-                        fetchCartItems();
-                      }}
-                    >
+                    <button className="quantity-btn" onClick={() => {
+                      updateQuantity(item?._id, -1);
+                      fetchCartItems();
+                    }}>
                       -
                     </button>
                     <span className="quantity-value">{item?.quantity}</span>
-                    <button
-                      className="quantity-btn"
-                      onClick={() => {
-                        updateQuantity(item?._id, 1);
-                        fetchCartItems();
-                      }}
-                    >
+                    <button className="quantity-btn" onClick={() => {
+                      updateQuantity(item?._id, 1);
+                      fetchCartItems();
+                    }}>
                       +
                     </button>
                   </div>
-                  <button
-                    className="remove-btn"
-                    onClick={() => {
-                      removeCartItem(item?._id);
-                      fetchCartItems();
-                    }}
-                  >
+                  <button className="remove-btn" onClick={() => {
+                    removeCartItem(item?._id);
+                    fetchCartItems();
+                  }}>
                     Remove
                   </button>
                 </div>
@@ -102,7 +102,6 @@ const Profile = () => {
         </div>
       )}
 
-      {/* Cart Summary */}
       {isCartVisible && (
         <div className="cart-summary">
           <h2 className="summary-title">Order Summary</h2>
@@ -124,12 +123,11 @@ const Profile = () => {
         </div>
       )}
 
-      {/* Order Popup */}
       {isOrderPopupOpen && (
         <OrderPopup
           onClose={() => {
             setIsOrderPopupOpen(false);
-            setIsCartVisible(true); // Show cart again when order popup is closed
+            setIsCartVisible(true);
           }}
           onSubmit={handleCheckout}
           total={calculateTotal()}

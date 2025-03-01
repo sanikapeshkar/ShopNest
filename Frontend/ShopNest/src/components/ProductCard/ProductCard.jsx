@@ -12,7 +12,6 @@ const ProductCard = ({ id, image, name, price, discount, originalPrice }) => {
     } = useContext(AuthContext);
 
   const handleCardClick = () => {
-    console.log("Clicked product:", { id, name, price }); // Debugging log
     setIsModalOpen(true);
   };
 

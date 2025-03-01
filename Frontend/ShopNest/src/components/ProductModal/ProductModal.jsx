@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import './ProductModal.css';
 import { addToCart } from '../../services/cart.service';
-import { toast } from 'react-toastify'; // Import toast
+import { toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
-const ProductModal = ({ product, onClose, userId ,isAuthenticated})=>{
+import {Loader} from '../Loader/Loader.jsx';
+const ProductModal = ({ product, onClose, userId, isAuthenticated }) => {
   const [quantity, setQuantity] = useState(1);
+  const [loading, setLoading] = useState(false); // Loader state
 
   const handleIncrement = () => {
     setQuantity(prev => prev + 1);
@@ -17,12 +19,12 @@ const ProductModal = ({ product, onClose, userId ,isAuthenticated})=>{
   };
 
   const handleAddToCart = async () => {
-    console.log("🛒 Attempting to add item to cart...");
-
-    if (!isAuthenticated){
+    if (!isAuthenticated) {
       toast.error("Please login first to add items to the cart.");
       return;
     }
+
+    setLoading(true); 
 
     try {
       const cartData = {
@@ -32,14 +34,14 @@ const ProductModal = ({ product, onClose, userId ,isAuthenticated})=>{
 
       await addToCart(cartData, userId);
       toast.success("Item added to cart successfully!");
-
       onClose();
     } catch (error) {
       console.error("❌ Error adding item to cart:", error);
       toast.error("Failed to add item to cart. Please try again.");
     }
-  };
 
+    setLoading(false); // Hide loader
+  };
 
   const discountedPrice = product.discount
     ? (product.originalPrice - (product.originalPrice * product.discount) / 100).toFixed(2)
@@ -48,7 +50,7 @@ const ProductModal = ({ product, onClose, userId ,isAuthenticated})=>{
   return (
     <div className="product-modal-overlay" onClick={onClose}>
       <div className="product-modal" onClick={e => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose}>&times;</button>
+        <button className="modal-close" onClick={onClose}>X</button>
 
         <div className="modal-content">
           <div className="modal-image-container">
@@ -89,8 +91,9 @@ const ProductModal = ({ product, onClose, userId ,isAuthenticated})=>{
               </button>
             </div>
 
-            <button className="add-to-cart-btn" onClick={handleAddToCart}>
-              Add to Cart - ${(discountedPrice * quantity).toFixed(2)}
+            <button className="add-to-cart-btn" onClick={handleAddToCart} disabled={loading}>
+              {loading ? <div>Adding to Cart ... </div>
+              : `Add to Cart - $${(discountedPrice * quantity).toFixed(2)}`}
             </button>
           </div>
         </div>
@@ -99,4 +102,4 @@ const ProductModal = ({ product, onClose, userId ,isAuthenticated})=>{
   );
 };
 
-export default ProductModal; 
+export default ProductModal;

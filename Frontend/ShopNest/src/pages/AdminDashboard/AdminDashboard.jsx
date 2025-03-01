@@ -180,15 +180,6 @@ const AdminDashboard = () => {
               />
               {errors.image && <p className="error">{errors.image}</p>}
 
-              <label htmlFor="imageUpload">Upload Image</label>
-              <input
-                type="file"
-                id="imageUpload"
-                name="imageUpload"
-                accept="image/*"
-                onChange={handleFileChange}
-              />
-
               {newProduct.image && (
                 <div className="image-preview">
                   <img
