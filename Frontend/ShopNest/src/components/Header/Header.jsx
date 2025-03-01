@@ -14,7 +14,8 @@ const Header = ({
   onLogin,
   onCartClick,
   onProfileClick,
-  onSearchProducts
+  onSearchProducts,
+  userName
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
@@ -29,6 +30,11 @@ const Header = ({
     onSearchProducts(value);
   };
 
+  const getRandomColor = () => {
+    const colors = ["#E0BBE4", "#D291BC", "#F3C1C6", "#FFC3A0", "#FFD5E5", "#C3B1E1", "#E6E6FA"];
+    return colors[Math.floor(Math.random() * colors.length)];
+  };
+  
 
   const handleLogoutClick = () => {
     setShowPopup(true);
@@ -66,27 +72,36 @@ const Header = ({
         ) : (
           <>
             {isAdmin !== "admin" && (
-              <button onClick={onCartClick}>
+              <button onClick={onCartClick} className="header-button">
                 <CartIcon /> Cart
               </button>
             )}
 
-
-            {isAdmin !== "admin" ?(
+            {isAdmin !== "admin" ? (
               <div className="profile-dropdown-container">
                 <button className="profile-button" onClick={toggleDropdown}>
-                  <FaUser className="profile-icon" size={20} />
+                  {userName ? (
+                    <div
+                      className="profile-initial"
+                      style={{ backgroundColor: getRandomColor() }} // Set random color
+                    >
+                      {userName.charAt(0).toUpperCase()}
+                    </div>
+                  ) : (
+                    <FaUser className="profile-icon" size={20} />
+                  )}
                 </button>
                 {showDropdown && (
                   <div className="dropdown-menu">
                     <button onClick={onProfileClick}>Profile</button>
                     <button onClick={handleLogoutClick}>Logout</button>
-
                   </div>
                 )}
               </div>
-            ):(
-            <button onClick={handleLogoutClick}>Logout</button>)}
+            ) : (
+              <button onClick={handleLogoutClick}>Logout</button>
+            )}
+
           </>
         )}
       </div>

@@ -99,6 +99,7 @@ const Dashboard = () => {
         onCartClick={handleProfileClick}
         onProfileClick={displayOrderHistory}
         onSearchProducts={handleSearchProducts}
+        userName={"sanika"}
       />
 
       <main className="dashboard-main">
