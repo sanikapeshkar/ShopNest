@@ -1,9 +1,9 @@
 .product-list {
-  display: flex;
- 
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
   justify-content: space-around;
-  padding: 20px ;
+  padding: 20px;
   margin: 0 auto;
   max-width: 1200px;
 }
@@ -15,4 +15,3 @@
     padding: 0.5rem;
   }
 }
-  

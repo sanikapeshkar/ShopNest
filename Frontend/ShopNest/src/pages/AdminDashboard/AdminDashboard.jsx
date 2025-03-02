@@ -8,8 +8,7 @@ import {
 } from "../../services/products.service";
 import "react-toastify/dist/ReactToastify.css";
 
-const AdminDashboard = () => {
-  const [products, setProducts] = useState([]);
+const AdminDashboard = ({products,setProducts})=>{
   const [newProduct, setNewProduct] = useState({
     name: "",
     price: "",
@@ -19,14 +18,10 @@ const AdminDashboard = () => {
     description: "",
   });
 
+
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    getAllProducts()
-      .then((data) => setProducts(data))
-      .catch((error) => console.error("Error fetching products:", error));
-  }, []);
 
   const validateForm = () => {
     let tempErrors = {};
@@ -76,6 +71,7 @@ const AdminDashboard = () => {
     try {
       await addProduct(productToAdd);
       const updatedProducts = await getAllProducts();
+
       setProducts(updatedProducts);
 
       setNewProduct({
