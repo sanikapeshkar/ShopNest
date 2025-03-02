@@ -19,7 +19,6 @@ const corsOptions = {
 };
 
 
-// Fix for __dirname in ES Module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
