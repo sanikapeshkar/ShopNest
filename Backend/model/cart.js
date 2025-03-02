@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const cartItemSchema = new mongoose.Schema({
   productId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Product', // Reference the Product model
+    ref: 'Product',
     required: true,
   },
   quantity: {
@@ -18,7 +18,7 @@ const cartSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
-    unique: true, // One cart per user
+    unique: true, 
   },
   items: [cartItemSchema],
 });

@@ -12,7 +12,6 @@ const PORT = process.env.PORT || 4000;
 
 const mongoURI = "mongodb+srv://Sanika:Sanika@shopnest.6kjvv.mongodb.net/?retryWrites=true&w=majority&appName=ShopNest";
 
-// CORS configuration
 const corsOptions = {
   origin: 'http://localhost:5173', 
   credentials: true,
@@ -28,7 +27,6 @@ app.use(cors(corsOptions));
 app.use(express.json()); 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Database connection
 const connectToDatabase = async () => {
   try {
     await mongoose.connect(mongoURI);
@@ -40,7 +38,6 @@ const connectToDatabase = async () => {
 
 connectToDatabase();
 
-// Routes
 app.get("/", (req, res) => {
   res.send("CORS-enabled backend running!");
 });
@@ -50,22 +47,18 @@ app.use("/api", orderRoutes);
 app.use("/api", userRoutes);
 app.use("/api", cartRoutes);
 
-// Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
 
-// Listen for connection events
 mongoose.connection.on("connected", () => {
   console.log("Mongoose connected to DB");
 });
 
-// Optional: Handle connection errors
 mongoose.connection.on("error", (err) => {
   console.error("MongoDB connection error:", err);
 });
 
-// Optional: Handle disconnection
 mongoose.connection.on("disconnected", () => {
   console.log("Mongoose disconnected from DB");
 });

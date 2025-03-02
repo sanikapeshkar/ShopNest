@@ -28,7 +28,7 @@ const Dashboard = () => {
   const [showProfile, setShowProfile] = useState(false);
   const [showOrderHistory, setShowOrderHistory] = useState(false);
   const [userDetails, setuserDetails] = useState({});
-  // Fetch all products on component mount
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {

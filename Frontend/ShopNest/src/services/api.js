@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'https://shopnest-urg5.onrender.com/api', // adjust this to your API base URL
+    baseURL: 'https://shopnest-urg5.onrender.com/api', 
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -10,7 +10,6 @@ const api = axios.create({
       }
 });
 
-// Request interceptor
 api.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('token');
@@ -24,14 +23,11 @@ api.interceptors.request.use(
     }
 );
 
-// Response interceptor
 api.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response?.status === 401) {
-            // Handle unauthorized access
             localStorage.removeItem('token');
-            // You might want to redirect to login page here
         }
         return Promise.reject(error);
     }

@@ -47,22 +47,6 @@ const Products = [
       originalPrice: 699.99,
       discount: 29,
     },
-    // {
-    //   id: 7,
-    //   image: 'https://via.placeholder.com/300',
-    //   name: 'Tablet',
-    //   price: 299.99,
-    //   originalPrice: 399.99,
-    //   discount: 25,
-    // },
-    // {
-    //   id: 8,
-    //   image: 'https://via.placeholder.com/300',
-    //   name: 'Gaming Laptop',
-    //   price: 999.99,
-    //   originalPrice: 1299.99,
-    //   discount: 23,
-    // },
   ];
   
   export default Products;

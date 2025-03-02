@@ -4,7 +4,7 @@ import Cart from '../model/cart.js';
 
 const router = express.Router();
 
-// 1. Place an Order
+
 router.post('/order/:userId', async (req, res) => {
   const { paymentMethod, shippingAddress } = req.body;
 
@@ -14,7 +14,6 @@ router.post('/order/:userId', async (req, res) => {
       return res.status(400).json({ message: 'Cart is empty or not found' });
     }
 
-    // Calculate total amount
     const totalAmount = cart.items.reduce(
       (sum, item) => sum + item.productId.price * item.quantity,
       0
@@ -34,7 +33,6 @@ router.post('/order/:userId', async (req, res) => {
 
     await order.save();
 
-    // Clear cart after placing order
     cart.items = [];
     await cart.save();
 
@@ -44,7 +42,6 @@ router.post('/order/:userId', async (req, res) => {
   }
 });
 
-// 2. Cancel an Order
 router.patch('/order/:orderId/cancel', async (req, res) => {
   try {
     const order = await Order.findById(req.params.orderId);
@@ -65,7 +62,6 @@ router.patch('/order/:orderId/cancel', async (req, res) => {
   }
 });
 
-// 3. Return an Order
 router.patch('/order/:orderId/return', async (req, res) => {
   try {
     const order = await Order.findById(req.params.orderId);
