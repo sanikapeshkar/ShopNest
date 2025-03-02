@@ -3,7 +3,7 @@ import './ProductModal.css';
 import { addToCart } from '../../services/cart.service';
 import { toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
-import {Loader} from '../Loader/Loader.jsx';
+import Loader from '../Loader/Loader';
 const ProductModal = ({ product, onClose, userId, isAuthenticated }) => {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false); // Loader state
@@ -40,7 +40,7 @@ const ProductModal = ({ product, onClose, userId, isAuthenticated }) => {
       toast.error("Failed to add item to cart. Please try again.");
     }
 
-    setLoading(false); // Hide loader
+    setLoading(false); 
   };
 
   const discountedPrice = product.discount

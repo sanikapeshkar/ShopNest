@@ -64,10 +64,9 @@ const Header = ({
       <div className="header-actions">
         {!isAuthenticated ? (
           <>
-            <button onClick={onCartClick}>
-              <CartIcon /> Cart
+            <button onClick={onLogin}className="header-button">
+              Login
             </button>
-            <button onClick={onLogin}>Login</button>
           </>
         ) : (
           <>
