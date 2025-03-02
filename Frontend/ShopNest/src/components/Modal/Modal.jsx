@@ -1,4 +1,4 @@
-// Modal.jsx
+
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import './Modal.css';
@@ -24,9 +24,7 @@ const Modal = ({ product, onClose }) => {
     }else{
       addToCart({productId:product.id,quantity:quantity},userId);
     }
-    console.log('Added to cart');
   };
-   // If login popup is open, render Login component
    if (loginPopup) {
     return <Login />;
   }

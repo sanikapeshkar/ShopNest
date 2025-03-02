@@ -28,7 +28,7 @@ const Dashboard = () => {
   const [showProfile, setShowProfile] = useState(false);
   const [showOrderHistory, setShowOrderHistory] = useState(false);
   const [userDetails, setuserDetails] = useState({});
-  // Fetch all products on component mount
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -39,7 +39,7 @@ const Dashboard = () => {
       }
     };
     fetchProducts();
-  }, []);
+  }, [products]);
 
   const handleSignup = () => {
     setSignupPopup(true);
@@ -89,6 +89,8 @@ const Dashboard = () => {
     }
   };
 
+
+
   return (
     <div className="app-container">
       <Header
@@ -104,7 +106,7 @@ const Dashboard = () => {
 
       <main className="dashboard-main">
         {userRole === "admin" ? (
-          <AdminDashboard />
+          <AdminDashboard   products={filteredProducts.length > 0 ? filteredProducts : products} setProducts={setProducts}/>
         ) : (
           <ProductList
             products={filteredProducts.length > 0 ? filteredProducts : products}
@@ -112,7 +114,6 @@ const Dashboard = () => {
         )}
       </main>
 
-      {/* Login Popup */}
       {loginPopup && (
         <div className="modal">
           <div className="modal-content">
@@ -124,7 +125,7 @@ const Dashboard = () => {
         </div>
       )}
 
-      {/* Signup Popup */}
+
       {signupPopup && (
         <div className="modal">
           <div className="modal-content">

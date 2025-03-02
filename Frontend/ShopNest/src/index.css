@@ -1,17 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Pacifico&display=swap');
 
 :root {
-  --primary-color: #8D77AB;    /* Purple - Primary actions, buttons */
-  --secondary-color: #BAD8B6;  /* Light Green - Secondary elements */
-  --accent-color: #E1EACD;     /* Light Yellow-Green - Backgrounds, accents */
-  --background-color: #F9F6E6; /* Light Cream - Main background */
+  --primary-color: #8D77AB;    
+  --secondary-color: #BAD8B6;  
+  --accent-color: #E1EACD;     
+  --background-color: #F9F6E6; 
   
-  --text-primary: #2C3E50;     /* Dark text */
-  --text-secondary: #566573;   /* Secondary text */
-  --text-light: #7F8C8D;      /* Light text */
+  --text-primary: #2C3E50;    
+  --text-secondary: #566573;  
+  --text-light: #7F8C8D;     
   
-  --error-color: #E74C3C;      /* Error messages */
-  --success-color: #BAD8B6;    /* Success messages */
+  --error-color: #E74C3C;  
+  --success-color: #BAD8B6;   
 }
 
 * {

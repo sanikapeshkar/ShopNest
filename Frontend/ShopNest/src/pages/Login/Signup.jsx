@@ -20,8 +20,6 @@ const Signup = ({ onSignupSuccess, showLoginPopup }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Password validation check
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match.');
       return;
@@ -30,7 +28,6 @@ const Signup = ({ onSignupSuccess, showLoginPopup }) => {
     try {
       const userData = await loginService.signup(formData);
       
-      // Check if onSignupSuccess exists before calling it
       if (onSignupSuccess) {
         onSignupSuccess(userData);
       }

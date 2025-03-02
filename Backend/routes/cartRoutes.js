@@ -5,16 +5,14 @@ import User from '../model/users.js';
 
 const router = express.Router();
 
-// 1. Get Cart by User ID
+
 router.get('/cart/:userId', async (req, res) => {
   try {
-    // Get the cart and populate product details
     const cart = await Cart.findOne({ userId: req.params.userId }).populate('items.productId');
     if (!cart) {
       return res.status(404).json({ message: 'Cart not found' });
     }
 
-    // Filter out items where the product no longer exists
     cart.items = cart.items.filter(item => item.productId != null);
 
     // Group items by productId and sum their quantities
@@ -40,7 +38,6 @@ router.get('/cart/:userId', async (req, res) => {
   }
 });
 
-// 2. Add Item to Cart
 router.post('/cart/:userId/add', async (req, res) => {
   const { productId, quantity } = req.body;
   try {
@@ -81,7 +78,6 @@ router.post('/cart/:userId/add', async (req, res) => {
   }
 });
 
-// 3. Remove Item from Cart
 router.delete('/cart/:userId/remove/:itemId', async (req, res) => {
   try {
     const cart = await Cart.findOne({ userId: req.params.userId });
@@ -104,7 +100,7 @@ router.delete('/cart/:userId/remove/:itemId', async (req, res) => {
 });
 
 router.put('/cart/:userId/update/:itemId', async (req, res) => {
-  const { action } = req.body; // 'increment' or 'decrement'
+  const { action } = req.body; 
   
   try {
     const cart = await Cart.findOne({ userId: req.params.userId });
@@ -117,7 +113,6 @@ router.put('/cart/:userId/update/:itemId', async (req, res) => {
       return res.status(404).json({ message: 'Item not found in cart' });
     }
 
-    // Update quantity based on action
     if (action === 'increment') {
       cart.items[itemIndex].quantity += 1;
     } else if (action === 'decrement') {

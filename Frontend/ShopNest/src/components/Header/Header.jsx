@@ -82,7 +82,7 @@ const Header = ({
                   {userName ? (
                     <div
                       className="profile-initial"
-                      style={{ backgroundColor: getRandomColor() }} // Set random color
+                      style={{ backgroundColor: getRandomColor() }} 
                     >
                       {userName.charAt(0).toUpperCase()}
                     </div>
