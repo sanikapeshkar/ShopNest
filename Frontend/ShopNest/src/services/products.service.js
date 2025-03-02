@@ -1,4 +1,4 @@
-// const BASE_URL = env.BASE_URL || 'http://localhost:5000/api';
+
 
 import api from './api';
 
