@@ -3,12 +3,9 @@ import PropTypes from "prop-types";
 import "./Header.css";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { FaUser, FaShoppingCart } from "react-icons/fa";
 
-const CartIcon = () => (
-  <svg className="cart-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
-  </svg>
-);
+const CartIcon = () => <FaShoppingCart className="cart-icon" />;
 
 const Header = ({
   isAuthenticated,
@@ -18,15 +15,13 @@ const Header = ({
   onCartClick,
   onProfileClick,
   onSearchProducts,
+  userName
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
-
-  const displayCart = () => {
-    onCartClick();
-  };
-
-  const displayProfile = () => {
-    onProfileClick();
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
   };
 
   const handleSearch = (e) => {
@@ -35,11 +30,20 @@ const Header = ({
     onSearchProducts(value);
   };
 
-  const handleLogout = () => {
-    toast.success("Logged out successfully! 👋");
-    onLogout();
+  const getRandomColor = () => {
+    const colors = ["#E0BBE4", "#D291BC", "#F3C1C6", "#FFC3A0", "#FFD5E5", "#C3B1E1", "#E6E6FA"];
+    return colors[Math.floor(Math.random() * colors.length)];
+  };
+  
+
+  const handleLogoutClick = () => {
+    setShowPopup(true);
   };
 
+  const confirmLogout = () => {
+    onLogout();
+    setShowPopup(false);
+  };
   return (
     <header className="header">
       <div className="header-logo">
@@ -60,24 +64,62 @@ const Header = ({
       <div className="header-actions">
         {!isAuthenticated ? (
           <>
-            <button onClick={displayCart}>
-              <CartIcon /> Cart
+            <button onClick={onLogin}className="header-button">
+              Login
             </button>
-            <button onClick={onLogin}>Login</button>
           </>
         ) : (
           <>
             {isAdmin !== "admin" && (
-              <button onClick={displayCart}>
+              <button onClick={onCartClick} className="header-button">
                 <CartIcon /> Cart
               </button>
             )}
-            {isAdmin !== "admin" && <button onClick={displayProfile}>Profile</button>}
-            <button onClick={handleLogout}>Logout</button>
+
+            {isAdmin !== "admin" ? (
+              <div className="profile-dropdown-container">
+                <button className="profile-button" onClick={toggleDropdown}>
+                  {userName ? (
+                    <div
+                      className="profile-initial"
+                      style={{ backgroundColor: getRandomColor() }} // Set random color
+                    >
+                      {userName.charAt(0).toUpperCase()}
+                    </div>
+                  ) : (
+                    <FaUser className="profile-icon" size={20} />
+                  )}
+                </button>
+                {showDropdown && (
+                  <div className="dropdown-menu">
+                    <button onClick={onProfileClick}>Profile</button>
+                    <button onClick={handleLogoutClick}>Logout</button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button onClick={handleLogoutClick}>Logout</button>
+            )}
+
           </>
         )}
       </div>
+      {showPopup && <LogoutPopup onConfirm={confirmLogout} onCancel={() => setShowPopup(false)} />}
     </header>
+  );
+};
+
+const LogoutPopup = ({ onConfirm, onCancel }) => {
+  return (
+    <div className="logout-overlay">
+      <div className="logout-popup">
+        <p>Are you sure you want to logout?</p>
+        <div className="logout-buttons">
+          <button className="confirm-btn" onClick={onConfirm}>Yes</button>
+          <button className="cancel-btn" onClick={onCancel}>Cancel</button>
+        </div>
+      </div>
+    </div>
   );
 };
 

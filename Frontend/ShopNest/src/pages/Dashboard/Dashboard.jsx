@@ -27,7 +27,7 @@ const Dashboard = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [showProfile, setShowProfile] = useState(false);
   const [showOrderHistory, setShowOrderHistory] = useState(false);
-
+  const [userDetails, setuserDetails] = useState({});
   // Fetch all products on component mount
   useEffect(() => {
     const fetchProducts = async () => {
@@ -99,6 +99,7 @@ const Dashboard = () => {
         onCartClick={handleProfileClick}
         onProfileClick={displayOrderHistory}
         onSearchProducts={handleSearchProducts}
+        userName={"sanika"}
       />
 
       <main className="dashboard-main">
@@ -118,7 +119,7 @@ const Dashboard = () => {
             <button className="close-button" onClick={() => setLoginPopup(false)}>
               ×
             </button>
-            <Login onLoginSuccess={handleLoginSuccess} showSignupPopup={handleSignup} />
+            <Login onLoginSuccess={handleLoginSuccess} showSignupPopup={handleSignup} handlesetUserData={setuserDetails}/>
           </div>
         </div>
       )}
@@ -153,14 +154,7 @@ const Dashboard = () => {
       )}
 
       {showOrderHistory && (
-        <div className="modal">
-          <div className="modal-content">
-            <button className="close-button" onClick={closeOrderHistory}>
-              ×
-            </button>
-            <OrderHistory />
-          </div>
-        </div>
+        <OrderHistory userData={userDetails} closeOrderHistory={closeOrderHistory}/>
       )}
     </div>
   );

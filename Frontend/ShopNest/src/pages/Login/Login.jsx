@@ -6,7 +6,7 @@ import { FiMail, FiLock } from 'react-icons/fi';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Login = ({ onLoginSuccess, showSignupPopup }) => {
+const Login = ({ onLoginSuccess, showSignupPopup,handlesetUserData })=>{
   const { setIsAuthenticated, setUserRole } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     email: '',
@@ -23,11 +23,11 @@ const Login = ({ onLoginSuccess, showSignupPopup }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData, 'formData');
     try {
       const userData = await loginService.login(formData);
       setIsAuthenticated(true);
       setUserRole(userData.user.role);
+      handlesetUserData(userData.user);
 
       toast.success("Login successful! 🎉", { autoClose: 2000 });
 
@@ -83,9 +83,6 @@ const Login = ({ onLoginSuccess, showSignupPopup }) => {
                 placeholder="Enter your password"
                 required
               />
-            </div>
-            <div className="forgot-password">
-              <span className="auth-link">Forgot Password?</span>
             </div>
           </div>
 

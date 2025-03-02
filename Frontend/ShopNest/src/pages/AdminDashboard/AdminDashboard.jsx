@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "./AdminDashboard.css";
 import {
   addProduct,
   deleteProduct,
   getAllProducts,
 } from "../../services/products.service";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const AdminDashboard = () => {
@@ -26,7 +25,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     getAllProducts()
       .then((data) => setProducts(data))
-      .catch((error) => console.log(error));
+      .catch((error) => console.error("Error fetching products:", error));
   }, []);
 
   const validateForm = () => {
@@ -38,7 +37,7 @@ const AdminDashboard = () => {
       tempErrors.stock = "Valid stock is required.";
     if (newProduct.discount < 0 || newProduct.discount > 100)
       tempErrors.discount = "Discount must be between 0 and 100.";
-    if (!newProduct.image.trim()) tempErrors.image = "Image URL is required.";
+    if (!newProduct.image.trim()) tempErrors.image = "Image is required.";
     if (!newProduct.description.trim())
       tempErrors.description = "Description is required.";
 
@@ -54,7 +53,15 @@ const AdminDashboard = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setNewProduct((prev) => ({ ...prev, image: imageUrl }));
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
 
@@ -66,37 +73,39 @@ const AdminDashboard = () => {
       discount: parseFloat(newProduct.discount),
     };
 
-    addProduct(productToAdd)
-      .then(() => {
-        setProducts([...products, productToAdd]);
-        setNewProduct({
-          name: "",
-          price: "",
-          stock: "",
-          discount: "",
-          image: "",
-          description: "",
-        });
-        setErrors({});
-        toast.success("Product added successfully! 🎉");
-      })
-      .catch(() => {
-        toast.error("Error adding product. Try again! ❌");
-      })
-      .finally(() => setIsSubmitting(false));
+    try {
+      await addProduct(productToAdd);
+      const updatedProducts = await getAllProducts();
+      setProducts(updatedProducts);
+
+      setNewProduct({
+        name: "",
+        price: "",
+        stock: "",
+        discount: "",
+        image: "",
+        description: "",
+      });
+      setErrors({});
+      toast.success("Product added successfully! 🎉");
+    } catch (error) {
+      toast.error("Error adding product. Try again! ❌");
+      console.error("Error:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const handleDelete = (productId) => {
-    deleteProduct(productId)
-      .then(() => {
-        getAllProducts()
-          .then((data) => setProducts(data))
-          .catch((error) => console.log(error));
-        toast.success("Product deleted successfully! 🗑️");
-      })
-      .catch(() => {
-        toast.error("Error deleting product. Try again! ❌");
-      });
+  const handleDelete = async (productId) => {
+    try {
+      await deleteProduct(productId);
+      const updatedProducts = await getAllProducts();
+      setProducts(updatedProducts);
+      toast.success("Product deleted successfully! 🗑️");
+    } catch (error) {
+      toast.error("Error deleting product. Try again! ❌");
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -167,9 +176,19 @@ const AdminDashboard = () => {
                 name="image"
                 value={newProduct.image}
                 onChange={handleInputChange}
-                required
+                placeholder="Paste image URL or upload a file"
               />
               {errors.image && <p className="error">{errors.image}</p>}
+
+              {newProduct.image && (
+                <div className="image-preview">
+                  <img
+                    src={newProduct.image}
+                    alt="Preview"
+                    style={{ width: "100px", height: "100px" }}
+                  />
+                </div>
+              )}
             </div>
 
             <div className="form-group">
@@ -184,11 +203,7 @@ const AdminDashboard = () => {
               {errors.description && <p className="error">{errors.description}</p>}
             </div>
 
-            <button
-              type="submit"
-              className="submit-btn"
-              disabled={isSubmitting}
-            >
+            <button type="submit" className="submit-btn" disabled={isSubmitting}>
               {isSubmitting ? "Adding..." : "Add Product"}
             </button>
           </form>
@@ -198,14 +213,14 @@ const AdminDashboard = () => {
           <h2>Current Products</h2>
           <div className="products-grid">
             {products.map((product) => (
-              <div key={product._id} className="product-item">
+              <div key={product.id} className="product-item">
                 <img src={product.image} alt={product.name} />
                 <div className="product-info">
                   <h3>{product.name}</h3>
                   <p>${product.price}</p>
                   <button
                     className="delete-btn"
-                    onClick={() => handleDelete(product._id)}
+                    onClick={() => handleDelete(product.id)}
                   >
                     Delete
                   </button>
