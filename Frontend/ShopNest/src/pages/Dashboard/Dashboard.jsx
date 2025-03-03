@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import ProductList from "../../components/ProductList/ProductList";
 import AdminDashboard from "../AdminDashboard/AdminDashboard";
 import Header from "../../components/Header/Header";
@@ -11,6 +11,7 @@ import { getAllProducts } from "../../services/products.service";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Dashboard.css";
+import { debounce } from "lodash";
 
 const Dashboard = () => {
   const {
@@ -27,19 +28,20 @@ const Dashboard = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [showProfile, setShowProfile] = useState(false);
   const [showOrderHistory, setShowOrderHistory] = useState(false);
-  const [userDetails, setuserDetails] = useState({});
+  const [userDetails, setUserDetails] = useState({});
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const allProducts = await getAllProducts();
         setProducts(allProducts);
+        setFilteredProducts(allProducts);
       } catch (error) {
         toast.error("Failed to fetch products.");
       }
     };
     fetchProducts();
-  }, [products]);
+  }, []);
 
   const handleSignup = () => {
     setSignupPopup(true);
@@ -70,25 +72,30 @@ const Dashboard = () => {
   const displayOrderHistory = () => setShowOrderHistory(true);
   const closeOrderHistory = () => setShowOrderHistory(false);
 
-  const handleSearchProducts = (searchTerm) => {
-    if (!searchTerm) {
-      setFilteredProducts(products);
-      toast.info("Showing all products.");
-    } else {
-      const filtered = products.filter((product) =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.description.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredProducts(filtered);
-
-      if (filtered.length > 0) {
-        toast.success(`Found ${filtered.length} matching products.`);
+  const debouncedSearch = useRef(
+    debounce((searchTerm, products) => {
+      if (!searchTerm) {
+        setFilteredProducts(products);
+        toast.info("Showing all products.");
       } else {
-        toast.warning("No matching products found.");
-      }
-    }
-  };
+        const filtered = products.filter((product) =>
+          product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          product.description.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setFilteredProducts(filtered);
 
+        if (filtered.length > 0) {
+          toast.success(`Found ${filtered.length} matching products.`);
+        } else {
+          toast.warning("No matching products found.");
+        }
+      }
+    }, 500)
+  ).current;
+
+  const handleSearchProducts = (searchTerm) => {
+    debouncedSearch(searchTerm, products);
+  };
 
 
   return (
@@ -101,16 +108,14 @@ const Dashboard = () => {
         onCartClick={handleProfileClick}
         onProfileClick={displayOrderHistory}
         onSearchProducts={handleSearchProducts}
-        userName={"sanika"}
+        userName={userDetails.name}
       />
 
       <main className="dashboard-main">
         {userRole === "admin" ? (
-          <AdminDashboard   products={filteredProducts.length > 0 ? filteredProducts : products} setProducts={setProducts}/>
+          <AdminDashboard products={filteredProducts} setProducts={setProducts} />
         ) : (
-          <ProductList
-            products={filteredProducts.length > 0 ? filteredProducts : products}
-          />
+          <ProductList products={filteredProducts} />
         )}
       </main>
 
@@ -120,11 +125,10 @@ const Dashboard = () => {
             <button className="close-button" onClick={() => setLoginPopup(false)}>
               ×
             </button>
-            <Login onLoginSuccess={handleLoginSuccess} showSignupPopup={handleSignup} handlesetUserData={setuserDetails}/>
+            <Login onLoginSuccess={handleLoginSuccess} showSignupPopup={handleSignup} handlesetUserData={setUserDetails} />
           </div>
         </div>
       )}
-
 
       {signupPopup && (
         <div className="modal">
@@ -155,7 +159,7 @@ const Dashboard = () => {
       )}
 
       {showOrderHistory && (
-        <OrderHistory userData={userDetails} closeOrderHistory={closeOrderHistory}/>
+        <OrderHistory userData={userDetails} closeOrderHistory={closeOrderHistory} />
       )}
     </div>
   );

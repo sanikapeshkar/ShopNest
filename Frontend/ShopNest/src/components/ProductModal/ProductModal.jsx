@@ -4,12 +4,19 @@ import { addToCart } from '../../services/cart.service';
 import { toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from '../Loader/Loader';
-const ProductModal = ({ product, onClose, userId, isAuthenticated }) => {
+const ProductModal = ({ product, onClose, userId, isAuthenticated,stock }) => {
   const [quantity, setQuantity] = useState(1);
-  const [loading, setLoading] = useState(false); // Loader state
+  const [loading, setLoading] = useState(false);
 
   const handleIncrement = () => {
-    setQuantity(prev => prev + 1);
+    if(quantity<stock){
+      setQuantity(prev => prev + 1);
+      
+    }
+    else{
+      toast.error('Quantity exceeding stock');
+    }
+ 
   };
 
   const handleDecrement = () => {
