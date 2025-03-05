@@ -126,7 +126,7 @@ const AdminDashboard = ({products,setProducts})=>{
 
             <div className="form-row">
               <div className="form-group">
-                <label htmlFor="price">Price</label>
+                <label htmlFor="price">MRP Price</label>
                 <input
                   type="number"
                   id="price"

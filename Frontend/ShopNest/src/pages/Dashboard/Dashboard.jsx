@@ -32,7 +32,6 @@ const Dashboard = () => {
   const [userDetails, setUserDetails] = useState({});
 
   const [isOrderPopupOpen, setIsOrderPopupOpen] = useState(false);
-  const [isCartVisible, setIsCartVisible] = useState(true);
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -175,7 +174,7 @@ const Dashboard = () => {
             <button className="close-button" onClick={closeProfile}>
               ×
             </button>
-            <Profile setShowProfile={setShowProfile} calculateTotal={calculateTotal} handleCheckout={handleCheckout}/>
+            <Profile  calculateTotal={calculateTotal} handleCheckout={handleCheckout} products={products}/>
           </div>
         </div>
       )}

@@ -3,20 +3,20 @@ import './ProductModal.css';
 import { addToCart } from '../../services/cart.service';
 import { toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
-import Loader from '../Loader/Loader';
-const ProductModal = ({ product, onClose, userId, isAuthenticated,stock }) => {
+
+
+const ProductModal = ({ product, onClose, userId, isAuthenticated }) => {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
 
+  const stock = product.stock; // Get stock from product
+
   const handleIncrement = () => {
-    if(quantity<stock){
+    if (quantity < stock) {
       setQuantity(prev => prev + 1);
-      
+    } else {
+      toast.error('Quantity exceeding available stock');
     }
-    else{
-      toast.error('Quantity exceeding stock');
-    }
- 
   };
 
   const handleDecrement = () => {
@@ -31,11 +31,16 @@ const ProductModal = ({ product, onClose, userId, isAuthenticated,stock }) => {
       return;
     }
 
+    if (quantity > stock) {
+      toast.error("Selected quantity exceeds available stock.");
+      return;
+    }
+
     setLoading(true); 
 
     try {
       const cartData = {
-        productId: product.id,
+        productId: product._id,  // Ensure product ID is correct
         quantity: quantity,
       };
 
@@ -93,6 +98,7 @@ const ProductModal = ({ product, onClose, userId, isAuthenticated,stock }) => {
               <button
                 className="quantity-btn"
                 onClick={handleIncrement}
+                disabled={quantity >= stock} // Prevents increasing above stock
               >
                 +
               </button>
@@ -108,5 +114,6 @@ const ProductModal = ({ product, onClose, userId, isAuthenticated,stock }) => {
     </div>
   );
 };
+
 
 export default ProductModal;

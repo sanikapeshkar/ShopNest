@@ -105,7 +105,7 @@ const Signup = ({ onSignupSuccess, showLoginPopup }) => {
         </form>
 
         <div className="auth-footer">
-          Already have an account?{' '}
+          Already have an account?
           <span className="auth-link" onClick={showLoginPopup}>
             Sign In
           </span>
