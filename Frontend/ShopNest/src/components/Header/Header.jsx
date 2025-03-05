@@ -98,7 +98,7 @@ const Header = ({
                 )}
               </div>
             ) : (
-              <button onClick={handleLogoutClick}>Logout</button>
+              <button onClick={handleLogoutClick} className="header-button">Logout</button>
             )}
 
           </>
