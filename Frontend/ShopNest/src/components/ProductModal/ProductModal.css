@@ -131,8 +131,6 @@
   color: #e74c3c;
   font-weight: bold;
 }
-
-/* Quantity controls */
 .quantity-controls {
   display: flex;
   align-items: center;

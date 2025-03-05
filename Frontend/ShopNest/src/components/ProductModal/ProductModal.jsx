@@ -9,7 +9,7 @@ const ProductModal = ({ product, onClose, userId, isAuthenticated }) => {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  const stock = product.stock; // Get stock from product
+  const stock = product.stock; 
 
   const handleIncrement = () => {
     if (quantity < stock) {
@@ -39,8 +39,9 @@ const ProductModal = ({ product, onClose, userId, isAuthenticated }) => {
     setLoading(true); 
 
     try {
+
       const cartData = {
-        productId: product._id,  // Ensure product ID is correct
+        productId: product.id,  
         quantity: quantity,
       };
 
