@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Dashboard.css";
 import { debounce } from "lodash";
+import OrderPopup from "../../components/OrderPopup/OrderPopup";
 
 const Dashboard = () => {
   const {
@@ -30,6 +31,8 @@ const Dashboard = () => {
   const [showOrderHistory, setShowOrderHistory] = useState(false);
   const [userDetails, setUserDetails] = useState({});
 
+  const [isOrderPopupOpen, setIsOrderPopupOpen] = useState(false);
+  const [isCartVisible, setIsCartVisible] = useState(true);
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -72,6 +75,25 @@ const Dashboard = () => {
   const displayOrderHistory = () => setShowOrderHistory(true);
   const closeOrderHistory = () => setShowOrderHistory(false);
 
+  
+  const calculateTotal = (cartItems) => {
+    if (!Array.isArray(cartItems)) {
+      console.error("cartItems is not an array:", cartItems);
+      return 0; 
+    }
+  
+    return cartItems.reduce((total, item) => {
+      const price = item?.productId?.price || 0;
+      const quantity = item?.quantity || 0;
+      return total + price * quantity;
+    }, 0);
+  }
+
+  const handleCheckout = () => {
+     setShowProfile(false);
+    setIsOrderPopupOpen(true);
+
+  };
   const debouncedSearch = useRef(
     debounce((searchTerm, products) => {
       if (!searchTerm) {
@@ -153,9 +175,19 @@ const Dashboard = () => {
             <button className="close-button" onClick={closeProfile}>
               ×
             </button>
-            <Profile />
+            <Profile setShowProfile={setShowProfile} calculateTotal={calculateTotal} handleCheckout={handleCheckout}/>
           </div>
         </div>
+      )}
+      
+      {isOrderPopupOpen && (
+        <OrderPopup
+          onClose={() => {
+            setIsOrderPopupOpen(false);
+          }}
+          onSubmit={handleCheckout}
+          total={calculateTotal()}
+        />
       )}
 
       {showOrderHistory && (

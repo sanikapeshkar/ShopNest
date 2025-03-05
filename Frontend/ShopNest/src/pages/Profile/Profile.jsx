@@ -4,10 +4,8 @@ import { getCartItems, removeCartItem, updateQuantity } from '../../services/car
 import OrderPopup from '../../components/OrderPopup/OrderPopup';
 import Loader from '../../components/Loader/Loader';
 
-const Profile = () => {
+const Profile = ({ setShowProfile,calculateTotal,handleCheckout }) => {
   const [cartItems, setCartItems] = useState([]);
-  const [isOrderPopupOpen, setIsOrderPopupOpen] = useState(false);
-  const [isCartVisible, setIsCartVisible] = useState(true);
   const [loading, setLoading] = useState(true);
 
   const fetchCartItems = async () => {
@@ -27,7 +25,7 @@ const Profile = () => {
 
   const removeItem = async (id) => {
     await removeCartItem(id);
-    fetchCartItems(); 
+    fetchCartItems();
   };
 
   const handleQuantityChange = async (id, amount) => {
@@ -35,18 +33,6 @@ const Profile = () => {
     fetchCartItems();
   };
 
-  const calculateTotal = () => {
-    return cartItems.reduce((total, item) => {
-      const price = item?.productId?.price || 0;
-      const quantity = item?.quantity || 0;
-      return total + price * quantity;
-    }, 0);
-  };
-
-  const handleCheckout = () => {
-    setIsOrderPopupOpen(true);
-    setIsCartVisible(false);
-  };
 
   if (loading) {
     return (
@@ -56,7 +42,7 @@ const Profile = () => {
     );
   }
 
-  if (cartItems.length === 0 && isCartVisible) {
+  if (cartItems.length === 0) {
     return (
       <div className="profile-page">
         <div className="cart-empty">
@@ -68,15 +54,16 @@ const Profile = () => {
   }
 
   return (
-    <div className="profile-page">
-      <header className="profile-header">
-        <h1 className="profile-title">Your Shopping Cart</h1>
-      </header>
 
-      {isCartVisible && (
+    <>
+      <div className="profile-page">
+        <header className="profile-header">
+          <h1 className="profile-title">Your Shopping Cart</h1>
+        </header>
+
         <div className="cart-items">
           {cartItems.map((item) => (
-            item?.productId && ( 
+            item?.productId && (
               <div key={item.productId._id} className="cart-item">
                 <img src={item.productId.image} alt={item.productId.name} className="cart-item-image" />
                 <div className="cart-item-details">
@@ -99,9 +86,7 @@ const Profile = () => {
             )
           ))}
         </div>
-      )}
 
-      {isCartVisible && (
         <div className="cart-summary">
           <h2 className="summary-title">Order Summary</h2>
           <div className="summary-row">
@@ -114,25 +99,16 @@ const Profile = () => {
           </div>
           <div className="summary-total">
             <span>Total</span>
-            <span>${calculateTotal().toFixed(2)}</span>
+            <span>${calculateTotal(cartItems).toFixed(2)}</span>
           </div>
           <button className="checkout-btn" onClick={handleCheckout}>
             Proceed to Checkout
           </button>
         </div>
-      )}
 
-      {isOrderPopupOpen && (
-        <OrderPopup
-          onClose={() => {
-            setIsOrderPopupOpen(false);
-            setIsCartVisible(true);
-          }}
-          onSubmit={handleCheckout}
-          total={calculateTotal()}
-        />
-      )}
-    </div>
+      </div>
+
+    </>
   );
 };
 
