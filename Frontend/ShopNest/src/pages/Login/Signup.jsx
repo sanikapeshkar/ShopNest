@@ -10,16 +10,31 @@ const Signup = ({ onSignupSuccess, showLoginPopup }) => {
     confirmPassword: '',
   });
   const [error, setError] = useState('');
+  const [emailError, setEmailError] = useState('');
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    // Validate email while typing
+    if (name === 'email') {
+      setEmailError(validateEmail(value) ? '' : 'Invalid email format');
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateEmail(formData.email)) {
+      setEmailError('Invalid email format');
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match.');
       return;
@@ -27,7 +42,6 @@ const Signup = ({ onSignupSuccess, showLoginPopup }) => {
 
     try {
       const userData = await loginService.signup(formData);
-      
       if (onSignupSuccess) {
         onSignupSuccess(userData);
       }
@@ -69,6 +83,7 @@ const Signup = ({ onSignupSuccess, showLoginPopup }) => {
               onChange={handleChange}
               required
             />
+            {emailError && <div className="error-message">{emailError}</div>}
           </div>
 
           <div className="form-group">
@@ -99,13 +114,13 @@ const Signup = ({ onSignupSuccess, showLoginPopup }) => {
 
           {error && <div className="error-message">{error}</div>}
 
-          <button type="submit" className="auth-button">
+          <button type="submit" className="auth-button" disabled={emailError}>
             Create Account
           </button>
         </form>
 
         <div className="auth-footer">
-          Already have an account?{' '}
+          Already have an account?
           <span className="auth-link" onClick={showLoginPopup}>
             Sign In
           </span>

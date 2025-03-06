@@ -28,13 +28,9 @@ const Login = ({ onLoginSuccess, showSignupPopup,handlesetUserData })=>{
       setIsAuthenticated(true);
       setUserRole(userData.user.role);
       handlesetUserData(userData.user);
-
-      toast.success("Login successful! 🎉", { autoClose: 2000 });
-
       if (userData.user.id) {
         onLoginSuccess();
       }
-      console.log('Login successful:', userData);
     } catch (err) {
       setError('Login failed. Please try again.');
       toast.error("Login failed. Please try again. ❌", { autoClose: 2000 });

@@ -4,12 +4,12 @@ import './ProductCard.css';
 import ProductModal from '../ProductModal/ProductModal';
 import { AuthContext } from '../../pages/Login/AuthContext';
 
-const ProductCard = ({ id, image, name, price, discount, originalPrice }) => {
+const ProductCard = ({ id, image, name, price, discount, originalPrice,stock }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const userId = localStorage.getItem('userId') || null; 
-   const {
-      isAuthenticated
-    } = useContext(AuthContext);
+  const userId = localStorage.getItem('userId') || null;
+  const {
+    isAuthenticated
+  } = useContext(AuthContext);
 
   const handleCardClick = () => {
     setIsModalOpen(true);
@@ -24,10 +24,11 @@ const ProductCard = ({ id, image, name, price, discount, originalPrice }) => {
   return (
     <>
       <div className="product-card" onClick={handleCardClick}>
-        <img 
-          src={image||`https://shopnest-urg5.onrender.com/${image}`}
-          alt={name} 
-          className="product-card-image" 
+        <img
+          src={image || '/CouldnotLoad.png'}
+          alt="Login"
+          onError={(e) => e.target.src = '/CouldnotLoad.png'}
+          className='product-card-image'
         />
         <div className="product-card-details">
           <h2 className="product-card-name">{name}</h2>
@@ -45,10 +46,11 @@ const ProductCard = ({ id, image, name, price, discount, originalPrice }) => {
 
       {isModalOpen && (
         <ProductModal
-          product={{ id, image, name, price, discount, originalPrice }}
+          product={{ id, image, name, price, discount, originalPrice,stock }}
           onClose={handleModalClose}
           userId={userId}
           isAuthenticated={isAuthenticated}
+          stock={stock}
         />
       )}
     </>

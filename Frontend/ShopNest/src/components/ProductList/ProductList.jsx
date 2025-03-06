@@ -4,8 +4,8 @@ import ProductCard from '../ProductCard/ProductCard';
 import './ProductList.css';
 
 const ProductList = ({ products }) => {
+
     if (!Array.isArray(products)) {
-      console.error('Products is not an array:', products);
       return <div>No products available</div>;
     }
   
@@ -23,6 +23,7 @@ const ProductList = ({ products }) => {
           price={product.price}
           originalPrice={product.originalPrice}
           discount={product.discount}
+          stock={product.stock}
         />
       ))}
     </div>
